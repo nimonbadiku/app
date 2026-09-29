@@ -287,6 +287,7 @@ export function SettingsView({
             <span>Export JSON</span>
           </button>
         </div>
+      </div>
 
       {/* IPHONE HOME SCREEN INSTRUCTIONS */}
       <div className="bg-white rounded-2xl border border-neutral-200/90 p-5 shadow-2xs space-y-2">
