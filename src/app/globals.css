@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    background-color: #FAFAFA;
+    color: #111111;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  input, textarea, select {
+    user-select: auto;
+    -webkit-user-select: auto;
+    font-size: 16px; /* Prevents iOS auto-zoom on focus */
+  }
+}
+
+.font-handwriting {
+  font-family: 'Caveat', cursive, Georgia, serif;
+}
+
+/* Safe area padding utilities for iPhone notch / dynamic island & home bar */
+.pb-safe {
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+}
+
+.pt-safe {
+  padding-top: max(12px, env(safe-area-inset-top, 12px));
+}
+
+/* Active button tap scale */
+.tap-active:active {
+  transform: scale(0.975);
+  transition: transform 0.08s ease-out;
+}

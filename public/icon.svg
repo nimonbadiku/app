@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#000000"/>
+  <!-- Door outline -->
+  <rect x="156" y="106" width="200" height="300" rx="16" fill="none" stroke="#FFFFFF" stroke-width="24"/>
+  <!-- Door handle -->
+  <circle cx="316" cy="260" r="14" fill="#FFFFFF"/>
+  <!-- Checkmark badge in corner -->
+  <circle cx="340" cy="350" r="64" fill="#000000" stroke="#FFFFFF" stroke-width="16"/>
+  <path d="M312 350 L332 370 L372 330" fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
