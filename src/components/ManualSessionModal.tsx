@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { SessionRecord, UserSettingsConfig } from "@/types";
-import { playTap, playSuccess } from "@/lib/audio";
+import { playSuccess } from "@/lib/audio";
 import { PlusCircle, Calendar, Clock, DoorClosed, CheckCircle2 } from "lucide-react";
 
 interface ManualSessionModalProps {
@@ -68,12 +68,12 @@ export function ManualSessionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
       <div className="w-full max-w-md max-h-[90vh] overflow-y-auto bg-white dark:bg-[#18181B] rounded-[28px] p-5 pb-safe animate-sheet-up border border-black/5 dark:border-white/10 shadow-2xl">
         <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-600 rounded-full mx-auto mb-3" />
 
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-[18px] font-bold text-neutral-950 dark:text-white flex items-center gap-2">
+          <h3 className="text-[19px] font-black text-neutral-950 dark:text-white flex items-center gap-2">
             <PlusCircle className="w-5 h-5" />
             Add Past Route
           </h3>
@@ -85,24 +85,24 @@ export function ManualSessionModal({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           {/* Date & Duration */}
           <div className="grid grid-cols-2 gap-2.5">
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 flex items-center gap-1">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 flex items-center gap-1">
                 <Calendar className="w-3 h-3" /> Date
               </label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono focus:outline-none"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono font-bold focus:outline-none"
                 required
               />
             </div>
 
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 flex items-center gap-1">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 flex items-center gap-1">
                 <Clock className="w-3 h-3" /> Duration (mins)
               </label>
               <input
@@ -110,7 +110,7 @@ export function ManualSessionModal({
                 min="1"
                 value={durationMinutes}
                 onChange={(e) => setDurationMinutes(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono focus:outline-none"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono font-bold focus:outline-none"
                 required
               />
             </div>
@@ -119,7 +119,7 @@ export function ManualSessionModal({
           {/* Doors & Sales */}
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 flex items-center gap-1">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 flex items-center gap-1">
                 <DoorClosed className="w-3 h-3" /> Doors
               </label>
               <input
@@ -127,13 +127,13 @@ export function ManualSessionModal({
                 min="0"
                 value={doors}
                 onChange={(e) => setDoors(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono focus:outline-none text-center"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono font-bold focus:outline-none text-center"
                 required
               />
             </div>
 
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1 flex items-center gap-1">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1 flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" /> Sales
               </label>
               <input
@@ -141,13 +141,13 @@ export function ManualSessionModal({
                 min="0"
                 value={yesCount}
                 onChange={(e) => setYesCount(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-emerald-600 dark:text-emerald-400 font-bold font-mono focus:outline-none text-center"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-emerald-600 dark:text-emerald-400 font-black font-mono focus:outline-none text-center"
                 required
               />
             </div>
 
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1">
                 Items Sold
               </label>
               <input
@@ -155,7 +155,7 @@ export function ManualSessionModal({
                 min="0"
                 value={itemsSold}
                 onChange={(e) => setItemsSold(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono focus:outline-none text-center"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono font-bold focus:outline-none text-center"
                 required
               />
             </div>
@@ -163,7 +163,7 @@ export function ManualSessionModal({
 
           {/* Not Home Count */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+            <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
               Not Home / No Answer Doors
             </label>
             <input
@@ -171,14 +171,14 @@ export function ManualSessionModal({
               min="0"
               value={notHomeCount}
               onChange={(e) => setNotHomeCount(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white font-mono font-bold focus:outline-none"
             />
           </div>
 
           {/* Territory & Pitch Focus */}
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
                 Territory
               </label>
               <input
@@ -186,12 +186,12 @@ export function ManualSessionModal({
                 placeholder="Sector 5"
                 value={territory}
                 onChange={(e) => setTerritory(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
                 Pitch Focus
               </label>
               <input
@@ -199,13 +199,13 @@ export function ManualSessionModal({
                 placeholder="2-Question Hook"
                 value={experiment}
                 onChange={(e) => setExperiment(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white focus:outline-none"
+                className="w-full px-3 py-2 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+            <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
               Notes
             </label>
             <textarea
@@ -213,13 +213,13 @@ export function ManualSessionModal({
               placeholder="Session notes..."
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white focus:outline-none resize-none"
+              className="w-full px-3 py-2 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white focus:outline-none resize-none"
             />
           </div>
 
           <button
             type="submit"
-            className="tap-spring w-full h-13 bg-black text-white dark:bg-white dark:text-black font-bold rounded-2xl text-[16px] mt-2 cursor-pointer"
+            className="tap-spring w-full h-13 bg-black text-white dark:bg-white dark:text-black font-extrabold rounded-3xl text-[16px] mt-2 cursor-pointer shadow-sm"
           >
             Save Route Record
           </button>

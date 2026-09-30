@@ -30,6 +30,7 @@ import {
   ChevronUp,
   Tag,
   Trash2,
+  Zap,
 } from "lucide-react";
 import { playTap, playSuccess, playUndo, playMilestone, triggerHaptic } from "@/lib/audio";
 
@@ -317,7 +318,6 @@ export function ActiveSessionView({
     triggerHaptic("medium", hapticsOn);
 
     if (session.isPaused) {
-      // Resume
       const pauseDuration = session.pausedAt ? Date.now() - session.pausedAt : 0;
       const updated: ActiveSession = {
         ...session,
@@ -328,7 +328,6 @@ export function ActiveSessionView({
       onUpdateSession(updated);
       showToast("Route Resumed");
     } else {
-      // Pause
       const updated: ActiveSession = {
         ...session,
         isPaused: true,
@@ -361,16 +360,16 @@ export function ActiveSessionView({
     <div className="flex flex-col max-w-md mx-auto px-4 pt-1 pb-safe-nav select-none min-h-[calc(100dvh-130px)] justify-between">
       {/* Toast Notification Pill */}
       {toastMessage && (
-        <div className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-black text-white dark:bg-white dark:text-black px-4 py-2 rounded-full text-xs font-semibold shadow-2xl animate-slide-down-notch flex items-center gap-1.5 border border-white/20 dark:border-black/20">
+        <div className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-[#0A0A0C] text-white px-4 py-2 rounded-full text-xs font-semibold shadow-2xl animate-slide-down-notch flex items-center gap-1.5 border border-white/20">
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* TOP SECTION: Live Pacing & Goal Card */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {/* Live Timer & Pause bar */}
-        <div className="flex items-center justify-between px-3.5 py-2 rounded-2xl bg-white dark:bg-[#121214] border border-black/[0.06] dark:border-white/[0.08] shadow-sm">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between px-4 py-2.5 ios-card">
+          <div className="flex items-center gap-2.5">
             <span className="relative flex h-2.5 w-2.5">
               {session.isPaused ? (
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
@@ -381,23 +380,23 @@ export function ActiveSessionView({
                 </>
               )}
             </span>
-            <span className="text-[14px] font-bold font-mono tracking-tight tabular-nums text-neutral-900 dark:text-neutral-100">
+            <span className="text-[15px] font-bold font-mono tracking-tight tabular-nums text-neutral-900 dark:text-neutral-100">
               {formatTimer(elapsedSeconds)}
             </span>
             {session.isPaused && (
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 bg-amber-500/15 px-2 py-0.5 rounded-md">
                 Paused
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold tabular-nums text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold font-mono text-neutral-700 dark:text-neutral-300">
               {formatHourlyRate(totalEarnings, elapsedSeconds, settings.currency)}
             </span>
             <button
               onClick={handleTogglePause}
-              className="tap-spring p-1 rounded-full text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
+              className="tap-spring p-1.5 rounded-full text-neutral-500 hover:text-black hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
               aria-label={session.isPaused ? "Resume route" : "Pause route"}
             >
               {session.isPaused ? (
@@ -411,16 +410,16 @@ export function ActiveSessionView({
 
         {/* Target Goal Progress Bar (if set) */}
         {targetPercent !== null && (
-          <div className="px-3.5 py-2 rounded-xl bg-white dark:bg-[#121214] border border-black/[0.05] dark:border-white/[0.06]">
-            <div className="flex items-center justify-between text-[11px] font-medium text-neutral-500 dark:text-neutral-400 mb-1">
-              <span className="flex items-center gap-1 font-semibold text-neutral-900 dark:text-neutral-100">
-                <Target className="w-3 h-3" /> Door Target
+          <div className="px-4 py-2.5 ios-card">
+            <div className="flex items-center justify-between text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1.5">
+              <span className="flex items-center gap-1.5 font-bold text-neutral-900 dark:text-neutral-100">
+                <Target className="w-3.5 h-3.5" /> Door Target
               </span>
-              <span className="tabular-nums font-mono font-semibold">
+              <span className="tabular-nums font-mono font-bold text-neutral-900 dark:text-neutral-100">
                 {session.doors} / {session.targetDoors} ({targetPercent}%)
               </span>
             </div>
-            <div className="w-full h-2 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-[#F4F5F7] dark:bg-neutral-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-black dark:bg-white rounded-full transition-all duration-300"
                 style={{ width: `${targetPercent}%` }}
@@ -431,20 +430,20 @@ export function ActiveSessionView({
 
         {/* HERO EARNINGS DISPLAY */}
         <div className="text-center py-2">
-          <p className="text-[44px] leading-none font-extrabold tabular-nums tracking-tight text-neutral-950 dark:text-white">
+          <p className="text-[48px] leading-none font-black tabular-nums font-mono tracking-tight text-neutral-950 dark:text-white">
             {totalEarnings}{" "}
-            <span className="text-[22px] font-bold text-neutral-400 dark:text-neutral-500">
+            <span className="text-[24px] font-bold text-neutral-400 font-sans">
               {settings.currency}
             </span>
           </p>
-          <div className="flex items-center justify-center gap-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400 font-medium">
+          <div className="flex items-center justify-center gap-2.5 mt-1.5 text-xs text-neutral-500 dark:text-neutral-400 font-semibold">
             <span>{doorsPerHour} doors/h</span>
             <span>•</span>
             <span>{yesRate}% yes rate</span>
             {session.itemsSold > 0 && (
               <>
                 <span>•</span>
-                <span>{session.itemsSold} sold</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">{session.itemsSold} sold</span>
               </>
             )}
           </div>
@@ -452,38 +451,38 @@ export function ActiveSessionView({
 
         {/* LIVE STATS COUNTER ROW */}
         <div className="grid grid-cols-4 gap-2">
-          <div className="bg-white dark:bg-[#121214] rounded-2xl p-2.5 text-center border border-black/[0.05] dark:border-white/[0.07] shadow-xs">
-            <p className="text-[20px] font-bold tabular-nums text-neutral-950 dark:text-white leading-tight">
+          <div className="ios-card p-3 text-center">
+            <p className="text-[22px] font-black tabular-nums font-mono text-neutral-950 dark:text-white leading-tight">
               {session.doors}
             </p>
-            <p className="text-[10px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mt-0.5">
+            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-0.5">
               Doors
             </p>
           </div>
 
-          <div className="bg-white dark:bg-[#121214] rounded-2xl p-2.5 text-center border border-black/[0.05] dark:border-white/[0.07] shadow-xs">
-            <p className="text-[20px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400 leading-tight">
+          <div className="ios-card p-3 text-center">
+            <p className="text-[22px] font-black tabular-nums font-mono text-emerald-600 dark:text-emerald-400 leading-tight">
               {session.yesCount}
             </p>
-            <p className="text-[10px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mt-0.5">
+            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-0.5">
               Yes
             </p>
           </div>
 
-          <div className="bg-white dark:bg-[#121214] rounded-2xl p-2.5 text-center border border-black/[0.05] dark:border-white/[0.07] shadow-xs">
-            <p className="text-[20px] font-bold tabular-nums text-neutral-950 dark:text-white leading-tight">
+          <div className="ios-card p-3 text-center">
+            <p className="text-[22px] font-black tabular-nums font-mono text-neutral-950 dark:text-white leading-tight">
               {session.noCount}
             </p>
-            <p className="text-[10px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mt-0.5">
+            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-0.5">
               No
             </p>
           </div>
 
-          <div className="bg-white dark:bg-[#121214] rounded-2xl p-2.5 text-center border border-black/[0.05] dark:border-white/[0.07] shadow-xs">
-            <p className="text-[20px] font-bold tabular-nums text-neutral-400 dark:text-neutral-500 leading-tight">
+          <div className="ios-card p-3 text-center">
+            <p className="text-[22px] font-black tabular-nums font-mono text-neutral-400 leading-tight">
               {session.notHomeCount}
             </p>
-            <p className="text-[10px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mt-0.5 truncate">
+            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-0.5 truncate">
               No Ans.
             </p>
           </div>
@@ -491,30 +490,30 @@ export function ActiveSessionView({
       </div>
 
       {/* MIDDLE: ACTION BUTTONS (Tactile, Ergonomic Thumb Zone) */}
-      <div className="my-auto py-2 space-y-2.5">
+      <div className="my-auto py-3 space-y-3">
         {/* Primary YES Action */}
         <button
           onClick={handleOpenYesModal}
-          className="tap-spring w-full h-[76px] bg-black text-white dark:bg-white dark:text-black rounded-3xl text-[21px] font-extrabold flex items-center justify-between px-6 shadow-md shadow-black/10 dark:shadow-white/10 border border-white/20 dark:border-black/20 cursor-pointer"
+          className="tap-spring w-full h-[78px] bg-black text-white dark:bg-white dark:text-black rounded-3xl text-[21px] font-black flex items-center justify-between px-6 shadow-[0_8px_25px_rgba(0,0,0,0.14)] border border-white/20 dark:border-black/20 cursor-pointer"
           aria-label="Door result: Yes sale"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-white/20 dark:bg-black/10 flex items-center justify-center">
-              <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-white/20 dark:bg-black/10 flex items-center justify-center">
+              <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
             </div>
             <span>YES (Sale)</span>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/15 dark:bg-black/10 text-white/90 dark:text-black/80 font-mono">
+          <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 dark:bg-black/10 text-white font-mono">
             +{settings.earningsPerItem} {settings.currency}
           </span>
         </button>
 
         {/* Secondary Row: NO and NOT HOME */}
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-3">
           <div className="relative">
             <button
               onClick={() => handleNo()}
-              className="tap-spring w-full h-[72px] bg-white text-neutral-900 dark:bg-[#121214] dark:text-white rounded-3xl text-[18px] font-bold border border-black/[0.08] dark:border-white/[0.12] flex flex-col items-center justify-center shadow-xs cursor-pointer"
+              className="tap-spring w-full h-[74px] ios-card text-neutral-900 dark:text-white text-[18px] font-black flex flex-col items-center justify-center cursor-pointer"
               aria-label="Door result: No"
             >
               <div className="flex items-center gap-1.5">
@@ -524,17 +523,17 @@ export function ActiveSessionView({
             </button>
             <button
               onClick={() => setShowObjectionSheet(true)}
-              className="tap-spring absolute right-2 top-2 p-1 text-neutral-400 hover:text-black dark:hover:text-white rounded-full cursor-pointer"
+              className="tap-spring absolute right-2.5 top-2.5 p-1 text-neutral-400 hover:text-black dark:hover:text-white rounded-full cursor-pointer"
               title="Tag objection reason"
               aria-label="Tag objection reason"
             >
-              <Tag className="w-3.5 h-3.5" />
+              <Tag className="w-4 h-4" />
             </button>
           </div>
 
           <button
             onClick={handleNotHome}
-            className="tap-spring h-[72px] bg-white text-neutral-500 dark:bg-[#121214] dark:text-neutral-400 rounded-3xl text-[16px] font-semibold border border-black/[0.08] dark:border-white/[0.12] flex flex-col items-center justify-center shadow-xs cursor-pointer"
+            className="tap-spring h-[74px] ios-card text-neutral-500 dark:text-neutral-400 text-[16px] font-bold flex flex-col items-center justify-center cursor-pointer"
             aria-label="Door result: Not home"
           >
             <div className="flex items-center gap-1.5">
@@ -546,16 +545,16 @@ export function ActiveSessionView({
       </div>
 
       {/* BOTTOM SECTION: Live Door Feed & Quick Tools */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {/* Recent Doors Toggle Bar */}
         {session.actionHistory.length > 0 && (
-          <div className="bg-white dark:bg-[#121214] rounded-2xl border border-black/[0.06] dark:border-white/[0.08] overflow-hidden">
+          <div className="ios-card overflow-hidden">
             <button
               onClick={() => setShowRecentDoors(!showRecentDoors)}
-              className="tap-spring w-full flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-neutral-600 dark:text-neutral-400 cursor-pointer"
+              className="tap-spring w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-300 cursor-pointer"
             >
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-black dark:bg-white inline-block"></span>
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-black dark:bg-white inline-block"></span>
                 Recent Doors ({session.actionHistory.length})
               </span>
               {showRecentDoors ? (
@@ -566,8 +565,8 @@ export function ActiveSessionView({
             </button>
 
             {showRecentDoors && (
-              <div className="px-3 pb-2.5 pt-1 space-y-1.5 max-h-36 overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-800">
-                {session.actionHistory.slice(0, 6).map((action, idx) => (
+              <div className="px-3.5 pb-3 pt-1 space-y-1.5 max-h-40 overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-800">
+                {session.actionHistory.slice(0, 8).map((action, idx) => (
                   <div
                     key={action.id}
                     className="flex items-center justify-between pt-1.5 text-xs"
@@ -577,7 +576,7 @@ export function ActiveSessionView({
                         #{session.doors - idx} • {formatTimeShort(action.timestamp)}
                       </span>
                       <span
-                        className={`font-semibold ${
+                        className={`font-bold ${
                           action.type === "YES"
                             ? "text-emerald-600 dark:text-emerald-400"
                             : action.type === "NO"
@@ -609,15 +608,15 @@ export function ActiveSessionView({
           </div>
         )}
 
-        {/* Quick Tools Row (Undo, Note, End Session) */}
-        <div className="flex items-center justify-between gap-1.5 px-1 py-1">
+        {/* Quick Tools Row (Undo, Note, Finish) */}
+        <div className="flex items-center justify-between gap-2">
           <button
             onClick={handleUndo}
             disabled={!canUndo}
-            className={`tap-spring flex-1 flex items-center justify-center gap-1.5 h-10 rounded-2xl text-xs font-semibold border transition-all cursor-pointer ${
+            className={`tap-spring flex-1 flex items-center justify-center gap-1.5 h-11 rounded-2xl text-xs font-bold border transition-all cursor-pointer ${
               canUndo
-                ? "bg-white dark:bg-[#121214] text-neutral-800 dark:text-neutral-200 border-black/[0.08] dark:border-white/[0.1] shadow-2xs"
-                : "bg-neutral-100/50 dark:bg-neutral-900/50 text-neutral-300 dark:text-neutral-700 border-transparent cursor-not-allowed"
+                ? "ios-card text-neutral-900 dark:text-neutral-100"
+                : "bg-neutral-100/60 dark:bg-neutral-900/40 text-neutral-300 dark:text-neutral-700 border-transparent cursor-not-allowed"
             }`}
             aria-label="Undo last door action"
           >
@@ -631,7 +630,7 @@ export function ActiveSessionView({
               setTempNoteText(sessionNote);
               setNoteModalOpen(true);
             }}
-            className="tap-spring flex-1 flex items-center justify-center gap-1.5 h-10 rounded-2xl text-xs font-semibold bg-white dark:bg-[#121214] text-neutral-800 dark:text-neutral-200 border border-black/[0.08] dark:border-white/[0.1] shadow-2xs cursor-pointer"
+            className="tap-spring flex-1 flex items-center justify-center gap-1.5 h-11 rounded-2xl text-xs font-bold ios-card text-neutral-900 dark:text-neutral-100 cursor-pointer"
             aria-label="Add note to session"
           >
             <FileText className="w-3.5 h-3.5" />
@@ -644,7 +643,7 @@ export function ActiveSessionView({
               triggerHaptic("medium", hapticsOn);
               setEndModalOpen(true);
             }}
-            className="tap-spring flex-1 flex items-center justify-center gap-1.5 h-10 rounded-2xl text-xs font-bold bg-neutral-900 text-white dark:bg-neutral-100 dark:text-black border border-transparent shadow-2xs cursor-pointer"
+            className="tap-spring flex-1 flex items-center justify-center gap-1.5 h-11 rounded-2xl text-xs font-extrabold bg-black text-white dark:bg-white dark:text-black border border-transparent shadow-xs cursor-pointer"
             aria-label="Finish and end session"
           >
             <Flag className="w-3.5 h-3.5" />
@@ -655,15 +654,14 @@ export function ActiveSessionView({
 
       {/* MODAL 1: QUANTITY SELECTOR SHEET */}
       {quantityModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
           <div className="w-full max-w-sm bg-white dark:bg-[#18181B] rounded-[28px] p-5 pb-safe animate-sheet-up border border-black/5 dark:border-white/10 shadow-2xl">
-            {/* Grabber Handle */}
             <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-600 rounded-full mx-auto mb-3" />
 
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-[18px] font-bold text-neutral-950 dark:text-white flex items-center gap-2">
+              <h3 className="text-[18px] font-black text-neutral-950 dark:text-white flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                How many items?
+                How many items sold?
               </h3>
               <button
                 onClick={() => setQuantityModalOpen(false)}
@@ -680,17 +678,17 @@ export function ActiveSessionView({
                   playTap(soundOn);
                   setSelectedQuantity((q) => Math.max(1, q - 1));
                 }}
-                className="tap-spring w-[54px] h-[54px] rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-900 dark:text-white border border-black/5 dark:border-white/10 cursor-pointer"
+                className="tap-spring w-[56px] h-[56px] rounded-full bg-[#F4F5F7] dark:bg-neutral-800 flex items-center justify-center text-neutral-900 dark:text-white border border-black/5 dark:border-white/10 cursor-pointer"
                 aria-label="Decrease quantity"
               >
                 <Minus className="w-5 h-5 stroke-[2.4]" />
               </button>
 
               <div className="text-center w-20">
-                <span className="text-[52px] leading-none font-black tabular-nums font-mono text-neutral-950 dark:text-white">
+                <span className="text-[54px] leading-none font-black tabular-nums font-mono text-neutral-950 dark:text-white">
                   {selectedQuantity}
                 </span>
-                <span className="block text-[11px] font-medium text-neutral-400 dark:text-neutral-500 mt-1">
+                <span className="block text-[11px] font-bold text-neutral-400 uppercase mt-1">
                   {selectedQuantity === 1 ? "Item" : "Items"}
                 </span>
               </div>
@@ -700,7 +698,7 @@ export function ActiveSessionView({
                   playTap(soundOn);
                   setSelectedQuantity((q) => q + 1);
                 }}
-                className="tap-spring w-[54px] h-[54px] rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-900 dark:text-white border border-black/5 dark:border-white/10 cursor-pointer"
+                className="tap-spring w-[56px] h-[56px] rounded-full bg-[#F4F5F7] dark:bg-neutral-800 flex items-center justify-center text-neutral-900 dark:text-white border border-black/5 dark:border-white/10 cursor-pointer"
                 aria-label="Increase quantity"
               >
                 <Plus className="w-5 h-5 stroke-[2.4]" />
@@ -716,10 +714,10 @@ export function ActiveSessionView({
                     playTap(soundOn);
                     setSelectedQuantity(num);
                   }}
-                  className={`tap-spring w-11 h-11 rounded-2xl text-[14px] font-bold font-mono transition-all cursor-pointer ${
+                  className={`tap-spring w-11 h-11 rounded-2xl text-[15px] font-black font-mono transition-all cursor-pointer ${
                     selectedQuantity === num
                       ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
-                      : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                      : "bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
                   }`}
                 >
                   {num}
@@ -728,11 +726,11 @@ export function ActiveSessionView({
             </div>
 
             {/* Live Commission & Retail Preview */}
-            <div className="text-center p-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900/80 border border-black/[0.04] dark:border-white/[0.05] mb-4">
-              <span className="text-[14px] font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+            <div className="text-center p-3 rounded-2xl bg-[#F6F7F9] dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05] mb-4">
+              <span className="text-[15px] font-black font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">
                 +{selectedQuantity * settings.earningsPerItem} {settings.currency} Commission
               </span>
-              <span className="block text-[11px] text-neutral-400 dark:text-neutral-500 mt-0.5">
+              <span className="block text-[11px] font-medium text-neutral-400 mt-0.5">
                 Retail total: {selectedQuantity * settings.pricePerItem} {settings.currency}
               </span>
             </div>
@@ -740,16 +738,16 @@ export function ActiveSessionView({
             {/* Optional Sale Note */}
             <input
               type="text"
-              placeholder="Sale note (e.g. Neighbor discount, 2nd floor)"
+              placeholder="Sale note (e.g. 2nd floor, neighbor bundle)"
               value={yesNote}
               onChange={(e) => setYesNote(e.target.value)}
-              className="w-full mb-3 px-3.5 py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none"
+              className="w-full mb-3 px-3.5 py-2.5 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 text-[13px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none"
             />
 
             {/* Save Button */}
             <button
               onClick={() => handleSaveYes(selectedQuantity, yesNote)}
-              className="tap-spring w-full h-[56px] bg-black text-white dark:bg-white dark:text-black rounded-2xl font-bold text-[17px] active:scale-[0.98] cursor-pointer"
+              className="tap-spring w-full h-[58px] bg-black text-white dark:bg-white dark:text-black rounded-3xl font-black text-[17px] shadow-md cursor-pointer"
             >
               Save Sale
             </button>
@@ -759,11 +757,11 @@ export function ActiveSessionView({
 
       {/* MODAL 2: OBJECTION TAG SHEET */}
       {showObjectionSheet && (
-        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
           <div className="w-full max-w-sm bg-white dark:bg-[#18181B] rounded-[28px] p-5 pb-safe animate-sheet-up border border-black/5 dark:border-white/10 shadow-2xl">
             <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-600 rounded-full mx-auto mb-3" />
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-[17px] font-bold text-neutral-950 dark:text-white">
+              <h3 className="text-[17px] font-black text-neutral-950 dark:text-white">
                 Log NO with Reason
               </h3>
               <button
@@ -774,8 +772,8 @@ export function ActiveSessionView({
               </button>
             </div>
 
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
-              Select the objection to track objection patterns:
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3 font-medium">
+              Select the objection to track patterns:
             </p>
 
             <div className="space-y-2">
@@ -783,16 +781,16 @@ export function ActiveSessionView({
                 <button
                   key={obj}
                   onClick={() => handleNo(obj)}
-                  className="tap-spring w-full h-12 rounded-2xl bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 text-left px-4 text-[14px] font-medium text-neutral-900 dark:text-neutral-100 border border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between cursor-pointer"
+                  className="tap-spring w-full h-12 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 hover:bg-neutral-200/70 text-left px-4 text-[14px] font-bold text-neutral-900 dark:text-neutral-100 flex items-center justify-between cursor-pointer"
                 >
                   <span>{obj}</span>
-                  <span className="text-xs text-neutral-400">Log</span>
+                  <span className="text-xs text-neutral-400 font-mono">Log</span>
                 </button>
               ))}
 
               <button
                 onClick={() => handleNo()}
-                className="tap-spring w-full h-11 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-semibold text-[14px] mt-2 cursor-pointer"
+                className="tap-spring w-full h-12 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-extrabold text-[14px] mt-2 cursor-pointer"
               >
                 Log General NO (No Tag)
               </button>
@@ -803,9 +801,9 @@ export function ActiveSessionView({
 
       {/* MODAL 3: NOTE QUICK INPUT */}
       {noteModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-white dark:bg-[#18181B] rounded-3xl p-5 border border-black/5 dark:border-white/10 shadow-2xl">
-            <h3 className="text-[17px] font-bold text-neutral-950 dark:text-white mb-2">
+            <h3 className="text-[17px] font-black text-neutral-950 dark:text-white mb-2">
               Route Note
             </h3>
             <textarea
@@ -813,7 +811,7 @@ export function ActiveSessionView({
               placeholder="e.g. Started at corner of Elm St, lots of dogs, return to #42 at 5 PM..."
               value={tempNoteText}
               onChange={(e) => setTempNoteText(e.target.value)}
-              className="w-full p-3 rounded-2xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none resize-none"
+              className="w-full p-3 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none resize-none"
             />
             <div className="flex gap-2 mt-4">
               <button
@@ -822,13 +820,13 @@ export function ActiveSessionView({
                   setNoteModalOpen(false);
                   showToast("Note saved");
                 }}
-                className="tap-spring flex-1 h-12 bg-black text-white dark:bg-white dark:text-black font-bold rounded-2xl cursor-pointer"
+                className="tap-spring flex-1 h-12 bg-black text-white dark:bg-white dark:text-black font-extrabold rounded-2xl cursor-pointer"
               >
                 Save Note
               </button>
               <button
                 onClick={() => setNoteModalOpen(false)}
-                className="tap-spring flex-1 h-12 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-semibold rounded-2xl cursor-pointer"
+                className="tap-spring flex-1 h-12 bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-bold rounded-2xl cursor-pointer"
               >
                 Cancel
               </button>
@@ -839,37 +837,37 @@ export function ActiveSessionView({
 
       {/* MODAL 4: END SESSION CONFIRMATION & SUMMARY */}
       {endModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150 p-2 sm:p-4">
           <div className="w-full max-w-sm max-h-[90vh] overflow-y-auto bg-white dark:bg-[#18181B] rounded-[28px] p-5 pb-safe animate-sheet-up border border-black/5 dark:border-white/10 shadow-2xl">
             <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-600 rounded-full mx-auto mb-3" />
 
-            <h3 className="text-[19px] font-bold text-neutral-950 dark:text-white">
+            <h3 className="text-[20px] font-black text-neutral-950 dark:text-white">
               Complete Route?
             </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
               Here is your performance summary for this session:
             </p>
 
             {/* Session Summary Card */}
-            <div className="my-4 p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-900/80 border border-black/[0.05] dark:border-white/[0.06] text-center">
-              <p className="text-[32px] font-extrabold text-neutral-950 dark:text-white tabular-nums">
+            <div className="my-4 p-4 rounded-2xl bg-[#F6F7F9] dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05] text-center">
+              <p className="text-[36px] font-black text-neutral-950 dark:text-white tabular-nums font-mono">
                 {totalEarnings}{" "}
-                <span className="text-lg font-bold text-neutral-400">
+                <span className="text-lg font-bold text-neutral-400 font-sans">
                   {settings.currency}
                 </span>
               </p>
-              <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 tabular-nums mt-1">
+              <p className="text-xs font-bold text-neutral-600 dark:text-neutral-300 tabular-nums mt-1 font-mono">
                 {session.doors} doors • {session.yesCount} yes • {session.itemsSold} items • {formatTimer(elapsedSeconds)}
               </p>
-              <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1">
+              <p className="text-[11px] font-semibold text-neutral-400 mt-1">
                 Pacing: {formatHourlyRate(totalEarnings, elapsedSeconds, settings.currency)} ({doorsPerHour} doors/h)
               </p>
             </div>
 
             {/* Territory / Neighborhood input */}
-            <div className="space-y-2.5 mb-4">
+            <div className="space-y-3 mb-4">
               <div>
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
                   Territory / Area (optional)
                 </label>
                 <input
@@ -877,12 +875,12 @@ export function ActiveSessionView({
                   placeholder="e.g. Maple Ridge, Sector 4"
                   value={sessionTerritory}
                   onChange={(e) => setSessionTerritory(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white focus:outline-none placeholder:text-neutral-400"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white focus:outline-none placeholder:text-neutral-400"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
                   Pitch Focus / Strategy
                 </label>
                 <input
@@ -890,12 +888,12 @@ export function ActiveSessionView({
                   placeholder="e.g. Direct hook, 2-item bundle pitch"
                   value={sessionExperiment}
                   onChange={(e) => setSessionExperiment(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white focus:outline-none placeholder:text-neutral-400"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white focus:outline-none placeholder:text-neutral-400"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
+                <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1 block">
                   Session Notes
                 </label>
                 <textarea
@@ -903,7 +901,7 @@ export function ActiveSessionView({
                   placeholder="Any objections, weather, or callback notes..."
                   value={sessionNote}
                   onChange={(e) => setSessionNote(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white focus:outline-none resize-none placeholder:text-neutral-400"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white focus:outline-none resize-none placeholder:text-neutral-400"
                 />
               </div>
             </div>
@@ -912,13 +910,13 @@ export function ActiveSessionView({
             <div className="space-y-2">
               <button
                 onClick={handleEndSubmit}
-                className="tap-spring w-full h-[54px] bg-black text-white dark:bg-white dark:text-black rounded-2xl font-bold text-[16px] shadow-sm cursor-pointer"
+                className="tap-spring w-full h-[56px] bg-black text-white dark:bg-white dark:text-black rounded-3xl font-extrabold text-[16px] shadow-sm cursor-pointer"
               >
                 Save & View in History
               </button>
               <button
                 onClick={() => setEndModalOpen(false)}
-                className="tap-spring w-full h-[48px] text-neutral-500 dark:text-neutral-400 font-semibold text-[14px] cursor-pointer"
+                className="tap-spring w-full h-[48px] text-neutral-500 dark:text-neutral-400 font-bold text-[14px] cursor-pointer"
               >
                 Keep Selling
               </button>

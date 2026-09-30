@@ -18,7 +18,7 @@ import {
   MapPin,
   ChevronRight,
   Flame,
-  Filter,
+  TrendingUp,
 } from "lucide-react";
 import { playTap } from "@/lib/audio";
 
@@ -52,7 +52,6 @@ export function HistoryView({
   const filteredSessions = useMemo(() => {
     let list = [...sessions];
 
-    // Time filter
     const now = new Date();
     if (timeFilter === "WEEK") {
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -62,7 +61,6 @@ export function HistoryView({
       list = list.filter((s) => new Date(s.startedAt) >= oneMonthAgo);
     }
 
-    // Search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       list = list.filter(
@@ -106,8 +104,8 @@ export function HistoryView({
   return (
     <div className="max-w-md mx-auto px-4 pt-2 pb-safe-nav select-none space-y-3.5">
       {/* Top Header & Add Button */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-[17px] font-extrabold text-neutral-950 dark:text-white tracking-tight">
+      <div className="flex items-center justify-between px-1">
+        <h2 className="text-[18px] font-black text-neutral-950 dark:text-white tracking-tight">
           Route History
         </h2>
         <button
@@ -115,22 +113,22 @@ export function HistoryView({
             playTap(soundOn);
             setManualModalOpen(true);
           }}
-          className="tap-spring flex items-center gap-1 px-3 py-1.5 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-bold shadow-xs cursor-pointer"
+          className="tap-spring flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-bold shadow-xs cursor-pointer"
         >
-          <Plus className="w-3.5 h-3.5" />
+          <Plus className="w-3.5 h-3.5 stroke-[2.4]" />
           <span>Add Route</span>
         </button>
       </div>
 
       {/* Aggregate KPI Summary Card */}
       {sessions.length > 0 && (
-        <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
-          <div className="flex items-baseline justify-between mb-2">
+        <div className="ios-card p-4 space-y-3">
+          <div className="flex items-baseline justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                All-Time Performance
+              <p className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-400">
+                All-Time Sales Earnings
               </p>
-              <p className="text-[28px] font-black tabular-nums tracking-tight text-neutral-950 dark:text-white font-mono mt-0.5">
+              <p className="text-[32px] font-black tabular-nums tracking-tight text-neutral-950 dark:text-white font-mono mt-0.5">
                 {totalEarned}{" "}
                 <span className="text-base font-bold text-neutral-400 font-sans">
                   {settings.currency}
@@ -138,37 +136,37 @@ export function HistoryView({
               </p>
             </div>
             <div className="text-right">
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+              <span className="text-xs font-black font-mono text-emerald-600 dark:text-emerald-400">
                 {avgRate} {settings.currency}/h avg
               </span>
-              <p className="text-[11px] text-neutral-400 mt-0.5">
+              <p className="text-[11px] font-semibold text-neutral-400 mt-0.5">
                 {overallYesRate}% Yes Rate
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/[0.04] dark:border-white/[0.06] text-center">
-            <div>
-              <span className="text-sm font-bold tabular-nums font-mono text-neutral-900 dark:text-white">
+          <div className="grid grid-cols-3 gap-2 pt-2.5 border-t border-black/[0.05] dark:border-white/[0.06] text-center">
+            <div className="bg-[#F8F9FA] dark:bg-neutral-900 rounded-xl py-2">
+              <span className="text-sm font-black tabular-nums font-mono text-neutral-900 dark:text-white">
                 {sessions.length}
               </span>
-              <span className="block text-[10px] font-medium text-neutral-400 uppercase">
+              <span className="block text-[10px] font-bold text-neutral-400 uppercase mt-0.5">
                 Routes
               </span>
             </div>
-            <div>
-              <span className="text-sm font-bold tabular-nums font-mono text-neutral-900 dark:text-white">
+            <div className="bg-[#F8F9FA] dark:bg-neutral-900 rounded-xl py-2">
+              <span className="text-sm font-black tabular-nums font-mono text-neutral-900 dark:text-white">
                 {totalDoors}
               </span>
-              <span className="block text-[10px] font-medium text-neutral-400 uppercase">
+              <span className="block text-[10px] font-bold text-neutral-400 uppercase mt-0.5">
                 Doors
               </span>
             </div>
-            <div>
-              <span className="text-sm font-bold tabular-nums font-mono text-neutral-900 dark:text-white">
+            <div className="bg-[#F8F9FA] dark:bg-neutral-900 rounded-xl py-2">
+              <span className="text-sm font-black tabular-nums font-mono text-neutral-900 dark:text-white">
                 {formatDurationHuman(totalSeconds)}
               </span>
-              <span className="block text-[10px] font-medium text-neutral-400 uppercase">
+              <span className="block text-[10px] font-bold text-neutral-400 uppercase mt-0.5">
                 Time
               </span>
             </div>
@@ -187,7 +185,7 @@ export function HistoryView({
               placeholder="Search territory, pitch focus, notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-8 py-2 rounded-2xl bg-white dark:bg-[#121214] border border-black/[0.06] dark:border-white/[0.08] text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none"
+              className="w-full pl-9 pr-8 py-2.5 rounded-2xl bg-white dark:bg-[#121214] border border-black/[0.06] dark:border-white/[0.08] shadow-xs text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none"
             />
             {searchQuery && (
               <button
@@ -200,7 +198,7 @@ export function HistoryView({
           </div>
 
           {/* Time Filter Pills */}
-          <div className="flex gap-1.5 p-1 bg-white dark:bg-[#121214] rounded-2xl border border-black/[0.06] dark:border-white/[0.08]">
+          <div className="flex gap-1.5 p-1 bg-[#F4F5F7] dark:bg-neutral-900 rounded-2xl border border-black/[0.03] dark:border-white/[0.05]">
             {(
               [
                 { id: "ALL", label: "All Time" },
@@ -216,7 +214,7 @@ export function HistoryView({
                 }}
                 className={`tap-spring flex-1 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
                   timeFilter === tab.id
-                    ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                    ? "bg-white text-black dark:bg-black dark:text-white shadow-xs"
                     : "text-neutral-500 dark:text-neutral-400"
                 }`}
               >
@@ -229,14 +227,14 @@ export function HistoryView({
 
       {/* SESSIONS LIST */}
       {sessions.length === 0 ? (
-        <div className="mt-6 text-center py-12 px-5 bg-white dark:bg-[#121214] rounded-3xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
-          <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mx-auto mb-3 text-neutral-400">
+        <div className="mt-6 text-center py-12 px-5 ios-card">
+          <div className="w-12 h-12 rounded-full bg-[#F4F5F7] dark:bg-neutral-800 flex items-center justify-center mx-auto mb-3 text-neutral-400">
             <Calendar className="w-6 h-6 stroke-[1.8]" />
           </div>
-          <h3 className="text-[16px] font-bold text-neutral-950 dark:text-white">
+          <h3 className="text-[17px] font-black text-neutral-950 dark:text-white">
             No Routes Logged Yet
           </h3>
-          <p className="text-xs text-neutral-400 mt-1 max-w-[240px] mx-auto">
+          <p className="text-xs text-neutral-400 mt-1 max-w-[240px] mx-auto font-medium">
             Knock doors with the live tracker, or backfill past route data manually.
           </p>
 
@@ -250,7 +248,7 @@ export function HistoryView({
             {onGenerateDemoData && (
               <button
                 onClick={onGenerateDemoData}
-                className="tap-spring w-full h-10 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold rounded-2xl cursor-pointer"
+                className="tap-spring w-full h-10 bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-bold rounded-2xl cursor-pointer"
               >
                 Load Sample Demo Routes
               </button>
@@ -258,7 +256,7 @@ export function HistoryView({
           </div>
         </div>
       ) : filteredSessions.length === 0 ? (
-        <div className="text-center py-10 bg-white dark:bg-[#121214] rounded-3xl border border-black/[0.06] dark:border-white/[0.08] p-4">
+        <div className="text-center py-10 ios-card p-4">
           <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">
             No routes matched &ldquo;{searchQuery}&rdquo;
           </p>
@@ -276,7 +274,7 @@ export function HistoryView({
         <div className="space-y-4">
           {groupedSessions.map((group) => (
             <div key={group.dateKey} className="space-y-2">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 px-1">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 px-1">
                 {group.dateKey}
               </p>
 
@@ -288,11 +286,11 @@ export function HistoryView({
                       playTap(soundOn);
                       setSelectedSession(session);
                     }}
-                    className="tap-spring w-full text-left bg-white dark:bg-[#121214] rounded-2xl border border-black/[0.06] dark:border-white/[0.08] p-3.5 shadow-xs cursor-pointer flex items-center justify-between group"
+                    className="tap-spring w-full text-left ios-card p-3.5 cursor-pointer flex items-center justify-between group"
                   >
                     <div className="flex-1 min-w-0 pr-2">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-[18px] font-black tabular-nums font-mono text-neutral-950 dark:text-white">
+                        <span className="text-[19px] font-black tabular-nums font-mono text-neutral-950 dark:text-white">
                           {session.earnings}{" "}
                           <span className="text-xs font-bold text-neutral-400 font-sans">
                             {session.currency}
@@ -316,15 +314,15 @@ export function HistoryView({
                       </div>
 
                       {(session.territory || session.experiment || session.note) && (
-                        <div className="flex items-center gap-1.5 mt-1.5 overflow-hidden">
+                        <div className="flex items-center gap-1.5 mt-2 overflow-hidden">
                           {session.territory && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 shrink-0">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 shrink-0">
                               <MapPin className="w-2.5 h-2.5" />
                               {session.territory}
                             </span>
                           )}
                           {session.experiment && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 truncate">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 truncate">
                               <Sparkles className="w-2.5 h-2.5 shrink-0" />
                               {session.experiment}
                             </span>

@@ -53,8 +53,8 @@ export function BottomNav({
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#F2F2F7]/85 dark:bg-black/85 backdrop-blur-2xl border-t border-black/[0.06] dark:border-white/[0.1] pb-safe transition-colors">
-      <div className="max-w-md mx-auto flex items-center h-[56px] px-3">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-black/95 backdrop-blur-2xl border-t border-black/[0.06] dark:border-white/[0.1] shadow-[0_-4px_25px_rgba(0,0,0,0.03)] pb-safe transition-colors">
+      <div className="max-w-md mx-auto flex items-center h-[58px] px-3">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -63,15 +63,15 @@ export function BottomNav({
               key={item.id}
               onClick={() => handleSelect(item.id)}
               aria-label={item.label}
-              className={`tap-spring flex-1 flex flex-col items-center justify-center py-1 transition-colors relative cursor-pointer select-none ${
+              className={`tap-spring flex-1 flex flex-col items-center justify-center py-1 transition-all relative cursor-pointer select-none ${
                 isActive
                   ? "text-black dark:text-white"
-                  : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  : "text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
               }`}
             >
               <div className="relative flex items-center justify-center">
                 <Icon
-                  className={`w-[22px] h-[22px] transition-transform ${
+                  className={`w-[22px] h-[22px] transition-transform duration-150 ${
                     isActive ? "stroke-[2.4] scale-105" : "stroke-[1.8]"
                   }`}
                 />
@@ -83,10 +83,10 @@ export function BottomNav({
                 )}
               </div>
               <span
-                className={`text-[10px] mt-0.5 font-medium transition-all ${
+                className={`text-[10px] mt-0.5 transition-all ${
                   isActive
-                    ? "font-semibold text-black dark:text-white"
-                    : "text-neutral-400 dark:text-neutral-500"
+                    ? "font-bold text-black dark:text-white"
+                    : "font-medium text-neutral-400"
                 }`}
               >
                 {item.label}

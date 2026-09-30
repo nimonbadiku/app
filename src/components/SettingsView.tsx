@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 import { UserSettingsConfig, SessionRecord } from "@/types";
 import {
-  Volume2,
-  VolumeX,
   Smartphone,
   Moon,
   Sun,
@@ -12,14 +10,9 @@ import {
   Download,
   Upload,
   RefreshCw,
-  Trash2,
   Sparkles,
-  DollarSign,
-  Target,
   Check,
-  Plus,
   X,
-  Info,
 } from "lucide-react";
 import { playTap, playSuccess } from "@/lib/audio";
 
@@ -201,23 +194,23 @@ export function SettingsView({
 
   return (
     <div className="max-w-md mx-auto px-4 pt-2 pb-safe-nav select-none space-y-4">
-      <h2 className="text-[17px] font-extrabold text-neutral-950 dark:text-white tracking-tight">
+      <h2 className="text-[18px] font-black text-neutral-950 dark:text-white tracking-tight px-1">
         Settings
       </h2>
 
       {/* 1. COMMISSION & PRICING CARD */}
-      <form onSubmit={handleSave} className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3.5">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+      <form onSubmit={handleSave} className="ios-card p-4.5 space-y-4">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400">
           Commission & Pricing
         </p>
 
         {/* Commission per Item */}
         <div className="flex items-center justify-between gap-3">
           <div>
-            <label htmlFor="earnings-input" className="text-xs font-semibold text-neutral-900 dark:text-white block">
+            <label htmlFor="earnings-input" className="text-xs font-bold text-neutral-900 dark:text-white block">
               Commission per Item
             </label>
-            <span className="text-[11px] text-neutral-400">Your direct payout per sale</span>
+            <span className="text-[11px] text-neutral-400 font-medium">Your direct payout per sale</span>
           </div>
           <div className="relative w-28">
             <input
@@ -228,10 +221,10 @@ export function SettingsView({
               min="0"
               value={earningsPerItem}
               onChange={(e) => setEarningsPerItem(e.target.value)}
-              className="w-full px-3 py-1.5 pr-8 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold font-mono text-right text-neutral-900 dark:text-white focus:outline-none"
+              className="w-full px-3 py-2 pr-8 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-xs font-black font-mono text-right text-neutral-900 dark:text-white focus:outline-none"
               required
             />
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-neutral-400">
+            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400">
               {currency}
             </span>
           </div>
@@ -240,10 +233,10 @@ export function SettingsView({
         {/* Retail Price per Item */}
         <div className="flex items-center justify-between gap-3">
           <div>
-            <label htmlFor="price-input" className="text-xs font-semibold text-neutral-900 dark:text-white block">
+            <label htmlFor="price-input" className="text-xs font-bold text-neutral-900 dark:text-white block">
               Retail Price per Item
             </label>
-            <span className="text-[11px] text-neutral-400">
+            <span className="text-[11px] text-neutral-400 font-medium">
               Customer price ({commissionPercent}% commission)
             </span>
           </div>
@@ -256,10 +249,10 @@ export function SettingsView({
               min="0"
               value={pricePerItem}
               onChange={(e) => setPricePerItem(e.target.value)}
-              className="w-full px-3 py-1.5 pr-8 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold font-mono text-right text-neutral-900 dark:text-white focus:outline-none"
+              className="w-full px-3 py-2 pr-8 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-xs font-black font-mono text-right text-neutral-900 dark:text-white focus:outline-none"
               required
             />
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-neutral-400">
+            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400">
               {currency}
             </span>
           </div>
@@ -267,7 +260,7 @@ export function SettingsView({
 
         {/* Currency Selector */}
         <div>
-          <span className="text-xs font-semibold text-neutral-900 dark:text-white block mb-1.5">
+          <span className="text-xs font-bold text-neutral-900 dark:text-white block mb-1.5">
             Currency
           </span>
           <div className="flex flex-wrap gap-1">
@@ -279,10 +272,10 @@ export function SettingsView({
                   playTap(soundEnabled);
                   setCurrency(c);
                 }}
-                className={`tap-spring flex-1 min-w-[42px] h-8 text-xs font-bold font-mono rounded-xl transition-all cursor-pointer ${
+                className={`tap-spring flex-1 min-w-[42px] h-9 text-xs font-bold font-mono rounded-xl transition-all cursor-pointer ${
                   currency === c
-                    ? "bg-black text-white dark:bg-white dark:text-black shadow-2xs"
-                    : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                    ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                    : "bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/70"
                 }`}
               >
                 {c}
@@ -295,7 +288,7 @@ export function SettingsView({
         <button
           type="submit"
           disabled={isSaving}
-          className="tap-spring w-full h-11 bg-black text-white dark:bg-white dark:text-black rounded-2xl font-bold text-xs shadow-xs cursor-pointer flex items-center justify-center gap-1.5 mt-2"
+          className="tap-spring w-full h-12 bg-black text-white dark:bg-white dark:text-black rounded-2xl font-bold text-xs shadow-xs cursor-pointer flex items-center justify-center gap-1.5 mt-2"
         >
           {saveSuccess ? (
             <>
@@ -311,20 +304,20 @@ export function SettingsView({
       </form>
 
       {/* 2. APPEARANCE & HAPTICS CARD */}
-      <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3.5">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+      <div className="ios-card p-4.5 space-y-4">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400">
           Appearance & Feedback
         </p>
 
         {/* Theme Selector */}
         <div>
-          <span className="text-xs font-semibold text-neutral-900 dark:text-white block mb-1.5">
+          <span className="text-xs font-bold text-neutral-900 dark:text-white block mb-1.5">
             Color Theme
           </span>
           <div className="grid grid-cols-3 gap-1.5">
             {(
               [
-                { id: "light", label: "Light", icon: Sun },
+                { id: "light", label: "Clean Light", icon: Sun },
                 { id: "dark", label: "OLED Dark", icon: Moon },
                 { id: "system", label: "System", icon: Laptop },
               ] as const
@@ -342,7 +335,7 @@ export function SettingsView({
                   className={`tap-spring h-10 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer ${
                     theme === t.id
                       ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
-                      : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                      : "bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -356,10 +349,10 @@ export function SettingsView({
         {/* Audio Sound Feedback */}
         <div className="flex items-center justify-between pt-1">
           <div>
-            <span className="text-xs font-semibold text-neutral-900 dark:text-white block">
+            <span className="text-xs font-bold text-neutral-900 dark:text-white block">
               Audio Clicks & Chimes
             </span>
-            <span className="text-[11px] text-neutral-400">
+            <span className="text-[11px] text-neutral-400 font-medium">
               Satisfying iOS mechanical feedback
             </span>
           </div>
@@ -386,10 +379,10 @@ export function SettingsView({
         {/* Vibration Haptics */}
         <div className="flex items-center justify-between pt-1">
           <div>
-            <span className="text-xs font-semibold text-neutral-900 dark:text-white block">
+            <span className="text-xs font-bold text-neutral-900 dark:text-white block">
               Haptic Vibration
             </span>
-            <span className="text-[11px] text-neutral-400">
+            <span className="text-[11px] text-neutral-400 font-medium">
               Physical tap vibrations on mobile
             </span>
           </div>
@@ -414,8 +407,8 @@ export function SettingsView({
       </div>
 
       {/* 3. ROUTE FOCUS PRESETS */}
-      <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+      <div className="ios-card p-4.5 space-y-3">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400">
           Pitch Focus Presets
         </p>
 
@@ -423,7 +416,7 @@ export function SettingsView({
           {focusPresets.map((preset) => (
             <span
               key={preset}
-              className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200"
+              className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200"
             >
               <span>{preset}</span>
               <button
@@ -449,12 +442,12 @@ export function SettingsView({
                 handleAddPreset();
               }
             }}
-            className="flex-1 px-3 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white focus:outline-none"
+            className="flex-1 px-3 py-2 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-xs font-medium text-neutral-900 dark:text-white focus:outline-none"
           />
           <button
             type="button"
             onClick={handleAddPreset}
-            className="tap-spring px-3 py-1.5 rounded-xl bg-black text-white dark:bg-white dark:text-black text-xs font-bold"
+            className="tap-spring px-3.5 py-2 rounded-xl bg-black text-white dark:bg-white dark:text-black text-xs font-bold"
           >
             Add
           </button>
@@ -462,8 +455,8 @@ export function SettingsView({
       </div>
 
       {/* 4. DEMO DATA & DATA MANAGEMENT */}
-      <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+      <div className="ios-card p-4.5 space-y-3">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400">
           Data & Testing
         </p>
 
@@ -475,9 +468,9 @@ export function SettingsView({
               playSuccess(soundEnabled);
               onGenerateDemoData();
             }}
-            className="tap-spring w-full h-11 rounded-2xl bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer border border-black/[0.04] dark:border-white/[0.05]"
+            className="tap-spring w-full h-12 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-900 dark:text-white text-xs font-extrabold flex items-center justify-center gap-2 cursor-pointer hover:bg-neutral-200/70 border border-black/[0.04]"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4 text-amber-500" />
             <span>Generate Realistic Sample Routes</span>
           </button>
         )}
@@ -487,7 +480,7 @@ export function SettingsView({
           <button
             onClick={handleExportCSV}
             disabled={sessions.length === 0}
-            className="tap-spring h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 flex items-center justify-center gap-1.5 disabled:opacity-40 cursor-pointer"
+            className="tap-spring h-11 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 flex items-center justify-center gap-1.5 disabled:opacity-40 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -496,7 +489,7 @@ export function SettingsView({
           <button
             onClick={handleExportJSON}
             disabled={sessions.length === 0}
-            className="tap-spring h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 flex items-center justify-center gap-1.5 disabled:opacity-40 cursor-pointer"
+            className="tap-spring h-11 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 flex items-center justify-center gap-1.5 disabled:opacity-40 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export JSON</span>
@@ -505,7 +498,7 @@ export function SettingsView({
 
         {/* Import JSON file */}
         {onImportJSON && (
-          <label className="tap-spring w-full h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 flex items-center justify-center gap-1.5 cursor-pointer">
+          <label className="tap-spring w-full h-11 rounded-xl bg-[#F4F5F7] dark:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 flex items-center justify-center gap-1.5 cursor-pointer">
             <Upload className="w-3.5 h-3.5" />
             <span>Import JSON Backup</span>
             <input
@@ -518,8 +511,8 @@ export function SettingsView({
         )}
 
         {/* Offline Sync Status */}
-        <div className="flex items-center justify-between pt-2 border-t border-black/[0.04] dark:border-white/[0.05]">
-          <span className="text-xs text-neutral-500">
+        <div className="flex items-center justify-between pt-2 border-t border-black/[0.05]">
+          <span className="text-xs text-neutral-500 font-medium">
             {offlinePendingCount > 0
               ? `${offlinePendingCount} pending cloud sync`
               : "All sessions synchronized"}
@@ -540,11 +533,11 @@ export function SettingsView({
       </div>
 
       {/* 5. IPHONE PWA INSTALL GUIDE */}
-      <div className="p-4 rounded-3xl bg-white dark:bg-[#121214] border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-1.5">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 flex items-center gap-1.5">
+      <div className="ios-card p-4.5 space-y-2">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
           <Smartphone className="w-3.5 h-3.5" /> Install as iPhone App
         </p>
-        <ol className="text-xs text-neutral-600 dark:text-neutral-400 space-y-1 list-decimal list-inside">
+        <ol className="text-xs text-neutral-600 dark:text-neutral-400 space-y-1 list-decimal list-inside font-medium">
           <li>Open this link in Safari on your iPhone</li>
           <li>Tap the <strong>Share</strong> button at bottom</li>
           <li>Tap <strong>Add to Home Screen</strong></li>
@@ -579,7 +572,7 @@ export function SettingsView({
         ) : (
           <button
             onClick={() => setConfirmClear(true)}
-            className="tap-spring w-full py-2 text-xs font-semibold text-neutral-400 hover:text-red-500 cursor-pointer"
+            className="tap-spring w-full py-2 text-xs font-bold text-neutral-400 hover:text-red-500 cursor-pointer"
           >
             Clear all saved routes
           </button>

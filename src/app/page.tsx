@@ -546,7 +546,7 @@ export default function HomePage() {
   const lastSession = sessions.length > 0 ? sessions[0] : null;
 
   return (
-    <div className="min-h-screen bg-[#F2F2F7] dark:bg-black text-neutral-900 dark:text-neutral-100 flex flex-col font-sans transition-colors selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
+    <div className="min-h-screen bg-[#F8F9FA] dark:bg-black text-neutral-900 dark:text-neutral-100 flex flex-col font-sans transition-colors selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
       {/* Top iOS Header */}
       <Header
         isSelling={isSelling}

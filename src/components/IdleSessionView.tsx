@@ -11,6 +11,8 @@ import {
   Flame,
   ChevronRight,
   TrendingUp,
+  Award,
+  CheckCircle2,
 } from "lucide-react";
 import { playTap, triggerHaptic } from "@/lib/audio";
 
@@ -43,7 +45,6 @@ export function IdleSessionView({
   const [territory, setTerritory] = useState("");
   const [targetDoors, setTargetDoors] = useState<number>(settings.defaultTargetDoors || 40);
   const [customTarget, setCustomTarget] = useState<string>("");
-  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const soundOn = settings.soundEnabled ?? true;
   const hapticsOn = settings.hapticsEnabled ?? true;
@@ -84,13 +85,16 @@ export function IdleSessionView({
 
   return (
     <div className="flex flex-col max-w-md mx-auto px-4 pt-2 pb-safe-nav select-none min-h-[calc(100dvh-130px)] justify-between">
-      {/* TOP SECTION: Today's Snapshot & Readiness */}
-      <div className="space-y-3">
-        {/* Readiness Header */}
-        <div className="flex items-center justify-between">
+      {/* TOP SECTION: Today's Snapshot & Setup */}
+      <div className="space-y-3.5">
+        {/* Status Bar */}
+        <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[12px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span className="text-[12px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
               Ready to Knock
             </span>
           </div>
@@ -99,21 +103,21 @@ export function IdleSessionView({
           </span>
         </div>
 
-        {/* Today's Activity Pill / Card (if active today) */}
+        {/* Today's Activity Card (if active today) */}
         {todaySessions.length > 0 && (
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#121214] border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
+          <div className="ios-card p-4 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /> Today&apos;s Total
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-500 flex items-center gap-1.5">
+                <Flame className="w-4 h-4 text-amber-500 fill-amber-500" /> Today&apos;s Performance
               </span>
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+              <span className="text-[15px] font-black font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">
                 +{todayEarnings} {settings.currency}
               </span>
             </div>
-            <div className="flex items-center gap-4 mt-2 text-xs font-medium text-neutral-600 dark:text-neutral-300">
+            <div className="flex items-center justify-between pt-1 text-xs text-neutral-600 dark:text-neutral-300 font-medium">
               <span>{todayDoors} doors knocked</span>
               <span>•</span>
-              <span>{todayYes} sales</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">{todayYes} sales</span>
               <span>•</span>
               <span>{todaySessions.length} {todaySessions.length === 1 ? "route" : "routes"}</span>
             </div>
@@ -121,19 +125,19 @@ export function IdleSessionView({
         )}
 
         {/* ROUTE SETUP CARD */}
-        <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3.5">
+        <div className="ios-card p-4.5 space-y-4">
           {/* Target Door Selector */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
-                <Target className="w-3.5 h-3.5" /> Door Target
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
+                <Target className="w-3.5 h-3.5 text-neutral-800 dark:text-neutral-200" /> Door Target
               </label>
-              <span className="text-xs font-semibold font-mono text-neutral-900 dark:text-white">
+              <span className="text-xs font-bold font-mono text-neutral-900 dark:text-white bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-lg">
                 {customTarget ? `${customTarget} doors` : `${targetDoors} doors`}
               </span>
             </div>
-            <div className="flex gap-1.5">
-              {[25, 40, 60, 80].map((count) => (
+            <div className="grid grid-cols-5 gap-1.5">
+              {[25, 40, 60, 80, 100].map((count) => (
                 <button
                   key={count}
                   type="button"
@@ -142,10 +146,10 @@ export function IdleSessionView({
                     setTargetDoors(count);
                     setCustomTarget("");
                   }}
-                  className={`tap-spring flex-1 h-9 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer ${
+                  className={`tap-spring h-10 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center justify-center ${
                     targetDoors === count && !customTarget
-                      ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
-                      : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                      ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
+                      : "bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/70"
                   }`}
                 >
                   {count}
@@ -156,28 +160,28 @@ export function IdleSessionView({
 
           {/* Territory / Area */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1.5 flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5" /> Territory (optional)
+            <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1.5 flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-neutral-800 dark:text-neutral-200" /> Territory / Area (optional)
             </label>
             <input
               type="text"
               placeholder="e.g. Westside Park, Sector B"
               value={territory}
               onChange={(e) => setTerritory(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05] text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-black/20 dark:focus:border-white/20"
+              className="w-full px-3.5 py-2.5 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800/80 border border-black/[0.04] dark:border-white/[0.06] text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-black/20"
             />
           </div>
 
           {/* Pitch Focus Presets */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" /> Pitch Focus
+              <label className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-neutral-800 dark:text-neutral-200" /> Pitch Focus / Strategy
               </label>
               {experiment && (
                 <button
                   onClick={() => setExperiment("")}
-                  className="text-[11px] text-neutral-400 hover:text-black dark:hover:text-white"
+                  className="text-[11px] font-semibold text-neutral-400 hover:text-black dark:hover:text-white"
                 >
                   Clear
                 </button>
@@ -189,7 +193,7 @@ export function IdleSessionView({
               placeholder="Strategy or opener to test..."
               value={experiment}
               onChange={(e) => setExperiment(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05] text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-black/20 dark:focus:border-white/20 mb-2"
+              className="w-full px-3.5 py-2.5 rounded-2xl bg-[#F4F5F7] dark:bg-neutral-800/80 border border-black/[0.04] dark:border-white/[0.06] text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-black/20 mb-2.5"
             />
 
             <div className="flex flex-wrap gap-1.5">
@@ -201,10 +205,10 @@ export function IdleSessionView({
                     playTap(soundOn);
                     setExperiment(experiment === preset ? "" : preset);
                   }}
-                  className={`tap-spring text-[11px] font-semibold px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+                  className={`tap-spring text-[11px] font-bold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                     experiment === preset
                       ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-2xs"
-                      : "bg-neutral-100/80 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border-transparent"
+                      : "bg-[#F4F5F7] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border-transparent hover:bg-neutral-200/70"
                   }`}
                 >
                   {preset}
@@ -224,18 +228,18 @@ export function IdleSessionView({
               playTap(soundOn);
               onViewHistory();
             }}
-            className="tap-spring w-full text-left bg-white dark:bg-[#121214] rounded-2xl border border-black/[0.06] dark:border-white/[0.08] p-3.5 shadow-xs cursor-pointer flex items-center justify-between group"
+            className="tap-spring w-full text-left ios-card p-3.5 cursor-pointer flex items-center justify-between group"
           >
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[17px] font-extrabold tabular-nums font-mono text-neutral-950 dark:text-white">
+                <span className="text-[18px] font-black tabular-nums font-mono text-neutral-950 dark:text-white">
                   {lastSession.earnings} {lastSession.currency}
                 </span>
-                <span className="text-[11px] font-medium text-neutral-400">
+                <span className="text-[11px] font-semibold text-neutral-400 font-mono">
                   {formatDateCaps(lastSession.startedAt)} • {formatDurationHuman(lastSession.durationSeconds)}
                 </span>
               </div>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 tabular-nums">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 tabular-nums font-medium">
                 {lastSession.doors} doors • {lastSession.yesCount} yes •{" "}
                 {formatHourlyRate(lastSession.earnings, lastSession.durationSeconds, lastSession.currency)}
               </p>
@@ -243,7 +247,7 @@ export function IdleSessionView({
             <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-neutral-600 group-hover:text-black dark:group-hover:text-white transition-colors" />
           </button>
         ) : (
-          <div className="p-3 rounded-2xl bg-white/60 dark:bg-[#121214]/60 border border-black/[0.04] dark:border-white/[0.05] text-center">
+          <div className="p-3 rounded-2xl bg-[#F6F7F9] dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05] text-center">
             <p className="text-xs text-neutral-500 dark:text-neutral-400">
               💡 {dailyTip}
             </p>
@@ -254,13 +258,13 @@ export function IdleSessionView({
         <div>
           <button
             onClick={handleStart}
-            className="tap-spring w-full h-[64px] bg-black text-white dark:bg-white dark:text-black rounded-3xl text-[19px] font-extrabold tracking-wide flex items-center justify-center gap-2.5 shadow-lg shadow-black/10 dark:shadow-white/10 border border-white/20 dark:border-black/20 cursor-pointer"
+            className="tap-spring w-full h-[68px] bg-black text-white dark:bg-white dark:text-black rounded-3xl text-[19px] font-extrabold tracking-wide flex items-center justify-center gap-2.5 shadow-[0_8px_25px_rgba(0,0,0,0.14)] border border-white/20 dark:border-black/20 cursor-pointer"
           >
             <Play className="w-5 h-5 fill-current" />
             <span>Start Route</span>
           </button>
-          <p className="text-center text-[11px] font-medium text-neutral-400 dark:text-neutral-500 mt-2">
-            Instant timestamp timer • Safe offline & on phone lock
+          <p className="text-center text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 mt-2">
+            Timestamp-safe timer • Works 100% offline & on locked screen
           </p>
         </div>
       </div>

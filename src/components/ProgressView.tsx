@@ -17,7 +17,6 @@ import {
   CheckCircle2,
   Trophy,
   BarChart2,
-  Calendar,
 } from "lucide-react";
 import { playTap } from "@/lib/audio";
 
@@ -46,7 +45,6 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
     if (timeframe === "7_DAYS") {
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       list = list.filter((s) => new Date(s.startedAt) >= oneWeekAgo);
-      // If less than 2 sessions in last 7 days, fallback to last 7 chronological sessions
       if (list.length < 2 && sessions.length >= 2) {
         list = [...sessions]
           .sort((a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime())
@@ -86,9 +84,6 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
       calculateHourlyRateNumber(a.earnings, a.durationSeconds)
   )[0];
 
-  const mostDoorsSession = [...sessions].sort((a, b) => b.doors - a.doors)[0];
-  const mostSalesSession = [...sessions].sort((a, b) => b.yesCount - a.yesCount)[0];
-
   // Week-over-week comparisons
   const now = new Date();
   const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
@@ -121,7 +116,6 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
 
   // Chart data extraction
   const chartPoints = filteredChronological.map((s, idx) => {
-    const h = s.durationSeconds > 0 ? s.durationSeconds / 3600 : 0;
     let val = 0;
     if (selectedMetric === "rate") {
       val = calculateHourlyRateNumber(s.earnings, s.durationSeconds);
@@ -213,46 +207,46 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
 
   return (
     <div className="max-w-md mx-auto px-4 pt-2 pb-safe-nav select-none space-y-3.5">
-      <h2 className="text-[17px] font-extrabold text-neutral-950 dark:text-white tracking-tight">
+      <h2 className="text-[18px] font-black text-neutral-950 dark:text-white tracking-tight px-1">
         Performance & Trends
       </h2>
 
       {sessions.length === 0 ? (
-        <div className="text-center py-12 px-5 bg-white dark:bg-[#121214] rounded-3xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
-          <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mx-auto mb-3 text-neutral-400">
+        <div className="text-center py-12 px-5 ios-card">
+          <div className="w-12 h-12 rounded-full bg-[#F4F5F7] dark:bg-neutral-800 flex items-center justify-center mx-auto mb-3 text-neutral-400">
             <BarChart2 className="w-6 h-6 stroke-[1.8]" />
           </div>
-          <h3 className="text-[16px] font-bold text-neutral-950 dark:text-white">
+          <h3 className="text-[17px] font-black text-neutral-950 dark:text-white">
             No Progress Data Yet
           </h3>
-          <p className="text-xs text-neutral-400 mt-1 max-w-[240px] mx-auto">
+          <p className="text-xs text-neutral-400 mt-1 max-w-[240px] mx-auto font-medium">
             Finish your first session to unlock interactive performance charts and milestone badges.
           </p>
         </div>
       ) : (
         <div className="space-y-3.5">
           {/* Top All-Time Stats Card */}
-          <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
-            <div className="flex items-baseline justify-between mb-1.5">
-              <span className="text-[28px] font-black tabular-nums tracking-tight font-mono text-neutral-950 dark:text-white">
+          <div className="ios-card p-4 space-y-2">
+            <div className="flex items-baseline justify-between">
+              <span className="text-[32px] font-black tabular-nums tracking-tight font-mono text-neutral-950 dark:text-white">
                 {totalEarned}{" "}
                 <span className="text-base font-bold text-neutral-400 font-sans">
                   {settings.currency}
                 </span>
               </span>
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+              <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono">
                 {averageRate} {settings.currency}/h avg
               </span>
             </div>
-            <p className="text-xs text-neutral-400 tabular-nums">
+            <p className="text-xs text-neutral-400 font-medium tabular-nums">
               {sessions.length} routes • {formatDurationHuman(totalSeconds)} • {totalDoors} doors • {totalYes} sales ({totalItems} items)
             </p>
           </div>
 
           {/* INTERACTIVE TREND CHART */}
-          <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3">
+          <div className="ios-card p-4 space-y-3">
             {/* Metric Selector Pills */}
-            <div className="flex gap-1 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-2xl overflow-x-auto no-scrollbar">
+            <div className="flex gap-1 p-1 bg-[#F4F5F7] dark:bg-neutral-900 rounded-2xl overflow-x-auto no-scrollbar">
               {(
                 [
                   { id: "rate", label: `${settings.currency}/h` },
@@ -281,10 +275,10 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
 
             {/* Timeframe Toggle */}
             <div className="flex items-center justify-between text-xs px-1">
-              <span className="font-bold text-neutral-900 dark:text-white text-xs">
+              <span className="font-black text-neutral-900 dark:text-white text-xs">
                 {metricLabels[selectedMetric].title}
               </span>
-              <div className="flex gap-1">
+              <div className="flex gap-1 bg-[#F4F5F7] dark:bg-neutral-800 p-0.5 rounded-lg">
                 {(
                   [
                     { id: "7_DAYS", label: "7 Routes" },
@@ -300,7 +294,7 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                     }}
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-md cursor-pointer ${
                       timeframe === t.id
-                        ? "bg-black text-white dark:bg-white dark:text-black"
+                        ? "bg-white text-black dark:bg-black dark:text-white shadow-2xs"
                         : "text-neutral-400 hover:text-black dark:hover:text-white"
                     }`}
                   >
@@ -312,7 +306,7 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
 
             {/* Chart Canvas / SVG */}
             {chartPoints.length < 2 ? (
-              <div className="py-12 text-center text-xs text-neutral-400">
+              <div className="py-12 text-center text-xs text-neutral-400 font-medium">
                 Log at least 2 sessions to see trend graph.
               </div>
             ) : (
@@ -323,8 +317,8 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                 >
                   <defs>
                     <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="currentColor" stopOpacity="0.0" />
+                      <stop offset="0%" stopColor="#000000" stopOpacity="0.12" />
+                      <stop offset="100%" stopColor="#000000" stopOpacity="0.0" />
                     </linearGradient>
                   </defs>
 
@@ -342,7 +336,6 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                       return { x, y, pt };
                     });
 
-                    // Build smooth curve path
                     const pathData = coords.reduce((acc, curr, i, arr) => {
                       if (i === 0) return `M ${curr.x},${curr.y}`;
                       const prev = arr[i - 1];
@@ -357,7 +350,6 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                       chartHeight - paddingY
                     } L ${coords[0].x},${chartHeight - paddingY} Z`;
 
-                    // Average line
                     const avgY =
                       chartHeight -
                       paddingY -
@@ -365,7 +357,6 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
 
                     return (
                       <>
-                        {/* Avg dashed line */}
                         <line
                           x1={paddingX}
                           y1={avgY}
@@ -377,32 +368,30 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                           opacity="0.5"
                         />
 
-                        {/* Area Fill */}
                         <path
                           d={areaData}
                           fill="url(#chartGradient)"
-                          className="text-black dark:text-white"
                         />
 
-                        {/* Main Stroke Path */}
                         <path
                           d={pathData}
                           fill="none"
-                          stroke="currentColor"
+                          stroke="#000000"
                           strokeWidth="2.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="text-black dark:text-white"
                         />
 
-                        {/* Data Points */}
                         {coords.map((c, i) => (
                           <g key={i}>
                             <circle
                               cx={c.x}
                               cy={c.y}
                               r={hoveredIndex === i ? 6 : 3.5}
-                              className="fill-white dark:fill-black stroke-black dark:stroke-white stroke-[2.5] cursor-pointer transition-all"
+                              fill={hoveredIndex === i ? "#000000" : "#FFFFFF"}
+                              stroke="#000000"
+                              strokeWidth={2.5}
+                              className="cursor-pointer transition-all"
                               onClick={() => {
                                 playTap(soundOn);
                                 setHoveredIndex(hoveredIndex === i ? null : i);
@@ -415,15 +404,14 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                   })()}
                 </svg>
 
-                {/* Scrubber Tooltip */}
                 {hoveredIndex !== null && chartPoints[hoveredIndex] ? (
-                  <div className="mt-2 text-center py-1.5 px-3 rounded-xl bg-black text-white dark:bg-white dark:text-black text-xs font-bold font-mono shadow-md animate-in fade-in">
+                  <div className="mt-2 text-center py-2 px-3 rounded-2xl bg-black text-white text-xs font-bold font-mono shadow-md animate-in fade-in">
                     {chartPoints[hoveredIndex].value}
                     {metricLabels[selectedMetric].unit} •{" "}
                     {chartPoints[hoveredIndex].dateLabel}
                   </div>
                 ) : (
-                  <p className="mt-1 text-center text-[10px] text-neutral-400 font-medium">
+                  <p className="mt-1 text-center text-[10px] text-neutral-400 font-semibold">
                     Tap any point on chart to inspect route value • Avg: {avgVal}
                     {metricLabels[selectedMetric].unit}
                   </p>
@@ -433,30 +421,28 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
           </div>
 
           {/* SALES CONVERSION FUNNEL CARD */}
-          <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+          <div className="ios-card p-4 space-y-3">
+            <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400">
               Sales Conversion Funnel
             </p>
 
             <div className="space-y-2 text-xs">
-              {/* Funnel Stage 1: Doors */}
-              <div className="p-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05]">
+              <div className="p-2.5 rounded-2xl bg-[#F6F7F9] dark:bg-neutral-900 border border-black/[0.03]">
                 <div className="flex justify-between font-bold text-neutral-900 dark:text-white mb-1">
                   <span>1. Doors Knocked</span>
                   <span className="font-mono">{totalDoors}</span>
                 </div>
-                <div className="w-full h-1.5 bg-neutral-200 dark:bg-neutral-700 rounded-full">
+                <div className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full">
                   <div className="h-full bg-black dark:bg-white rounded-full w-full" />
                 </div>
               </div>
 
-              {/* Funnel Stage 2: Contacts */}
-              <div className="p-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05]">
+              <div className="p-2.5 rounded-2xl bg-[#F6F7F9] dark:bg-neutral-900 border border-black/[0.03]">
                 <div className="flex justify-between font-bold text-neutral-900 dark:text-white mb-1">
                   <span>2. Answered Doors ({overallContactRate}%)</span>
                   <span className="font-mono">{totalYes + totalNo}</span>
                 </div>
-                <div className="w-full h-1.5 bg-neutral-200 dark:bg-neutral-700 rounded-full">
+                <div className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full">
                   <div
                     className="h-full bg-neutral-800 dark:bg-neutral-200 rounded-full"
                     style={{ width: `${Math.min(100, parseFloat(overallContactRate) || 0)}%` }}
@@ -464,13 +450,12 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                 </div>
               </div>
 
-              {/* Funnel Stage 3: Closed Sales */}
-              <div className="p-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-black/[0.04] dark:border-white/[0.05]">
+              <div className="p-2.5 rounded-2xl bg-[#F6F7F9] dark:bg-neutral-900 border border-black/[0.03]">
                 <div className="flex justify-between font-bold text-emerald-600 dark:text-emerald-400 mb-1">
                   <span>3. Pitches Closed ({overallCloseRate}% of contacts)</span>
                   <span className="font-mono">{totalYes} sales</span>
                 </div>
-                <div className="w-full h-1.5 bg-neutral-200 dark:bg-neutral-700 rounded-full">
+                <div className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full">
                   <div
                     className="h-full bg-emerald-500 rounded-full"
                     style={{ width: `${Math.min(100, parseFloat(overallYesRate) || 0)}%` }}
@@ -481,14 +466,14 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
           </div>
 
           {/* WEEK-OVER-WEEK COMPARISON */}
-          <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
-            <div className="flex items-baseline justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+          <div className="ios-card p-4 space-y-2">
+            <div className="flex items-baseline justify-between">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400">
                 This Week vs Last Week
               </span>
               {weekRateDiff !== null && (
                 <span
-                  className={`text-xs font-bold font-mono ${
+                  className={`text-xs font-black font-mono ${
                     weekRateDiff >= 0
                       ? "text-emerald-600 dark:text-emerald-400"
                       : "text-rose-500"
@@ -500,26 +485,26 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
             </div>
 
             <div className="flex items-baseline justify-between">
-              <span className="text-[22px] font-black font-mono tabular-nums text-neutral-950 dark:text-white">
+              <span className="text-[24px] font-black font-mono tabular-nums text-neutral-950 dark:text-white">
                 {cwEarned}{" "}
                 <span className="text-xs font-bold text-neutral-400 font-sans">
                   {settings.currency}
                 </span>
               </span>
-              <span className="text-xs font-bold text-neutral-500 font-mono">
+              <span className="text-xs font-black text-neutral-500 font-mono">
                 {cwRate} {settings.currency}/h
               </span>
             </div>
 
-            <p className="text-xs text-neutral-400 mt-1 tabular-nums">
+            <p className="text-xs text-neutral-400 font-medium tabular-nums">
               {currentWeekSessions.length} routes • {formatDurationHuman(cwSeconds)} • {cwDoors} doors
             </p>
           </div>
 
           {/* ACHIEVEMENTS / MILESTONE BADGES SHELF */}
-          <div className="bg-white dark:bg-[#121214] rounded-3xl p-4 border border-black/[0.06] dark:border-white/[0.08] shadow-xs space-y-3">
+          <div className="ios-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-400 flex items-center gap-1.5">
                 <Trophy className="w-3.5 h-3.5" /> Milestones & Badges
               </p>
               <span className="text-xs font-bold font-mono text-neutral-500">
@@ -535,15 +520,15 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                     key={ach.id}
                     className={`p-3 rounded-2xl border transition-all flex items-center justify-between ${
                       ach.unlocked
-                        ? "bg-neutral-50 dark:bg-neutral-900 border-black/[0.08] dark:border-white/[0.1]"
-                        : "bg-neutral-100/50 dark:bg-neutral-900/40 border-transparent opacity-60"
+                        ? "bg-[#F8F9FA] dark:bg-neutral-900 border-black/[0.06] dark:border-white/[0.1]"
+                        : "bg-neutral-50 dark:bg-neutral-900/40 border-transparent opacity-60"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+                        className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 ${
                           ach.unlocked
-                            ? "bg-black text-white dark:bg-white dark:text-black"
+                            ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
                             : "bg-neutral-200 dark:bg-neutral-800 text-neutral-400"
                         }`}
                       >
@@ -553,7 +538,7 @@ export function ProgressView({ sessions, settings }: ProgressViewProps) {
                         <p className="text-xs font-bold text-neutral-950 dark:text-white">
                           {ach.title}
                         </p>
-                        <p className="text-[10px] text-neutral-400">{ach.desc}</p>
+                        <p className="text-[10px] text-neutral-400 font-medium">{ach.desc}</p>
                       </div>
                     </div>
 
