@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  // Allow cross-origin preview embedding and HMR in sandbox environment
+  allowedDevOrigins: ["*.e2b.app", "*.e2b.dev", "localhost:3000"],
 };
 
 export default nextConfig;
