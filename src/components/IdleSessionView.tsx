@@ -79,18 +79,18 @@ export function IdleSessionView({
           onClick={onViewHistory}
           className="w-full text-left bg-white rounded-2xl border border-neutral-200/80 px-4 py-3 active:scale-[0.99] transition-transform cursor-pointer"
         >
-          <div className="flex items-baseline justify-between gap-2">
+          <span className="flex items-baseline justify-between gap-2">
             <span className="text-xl font-bold tabular-nums text-neutral-950 tracking-tight">
               {lastSession.earnings} {lastSession.currency}
             </span>
             <span className="text-[11px] font-medium text-neutral-400 shrink-0">
               {formatDateCaps(lastSession.startedAt)} · {formatDurationHuman(lastSession.durationSeconds)}
             </span>
-          </div>
-          <p className="text-xs text-neutral-500 mt-0.5 tabular-nums">
+          </span>
+          <span className="block text-xs text-neutral-500 mt-0.5 tabular-nums">
             {lastSession.doors} doors · {lastSession.yesCount} yes ·{" "}
             {formatHourlyRate(lastSession.earnings, lastSession.durationSeconds, lastSession.currency)}
-          </p>
+          </span>
         </button>
       ) : (
         <p className="text-center text-[13px] text-neutral-300">

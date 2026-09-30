@@ -45,25 +45,25 @@ export function HistoryView({
               onClick={() => setSelectedSession(session)}
               className="w-full text-left bg-white rounded-2xl border border-neutral-200/80 px-4 py-3 active:scale-[0.99] transition-transform cursor-pointer"
             >
-              <div className="flex items-baseline justify-between gap-2">
+              <span className="flex items-baseline justify-between gap-2">
                 <span className="text-xl font-bold tabular-nums text-neutral-950 tracking-tight">
                   {session.earnings} {session.currency}
                 </span>
                 <span className="text-[11px] font-medium text-neutral-400 shrink-0 tabular-nums">
                   {formatDateCaps(session.startedAt)}
                 </span>
-              </div>
+              </span>
 
-              <p className="text-xs text-neutral-500 mt-0.5 tabular-nums">
+              <span className="block text-xs text-neutral-500 mt-0.5 tabular-nums">
                 {session.doors} doors · {session.yesCount} yes · {session.itemsSold} items ·{" "}
                 {formatDurationHuman(session.durationSeconds)} ·{" "}
                 {formatHourlyRate(session.earnings, session.durationSeconds, session.currency)}
-              </p>
+              </span>
 
               {(session.note || session.experiment) && (
-                <p className="mt-1.5 text-[13px] text-neutral-400 truncate">
+                <span className="block mt-1.5 text-[13px] text-neutral-400 truncate">
                   {session.experiment || session.note}
-                </p>
+                </span>
               )}
             </button>
           ))}
