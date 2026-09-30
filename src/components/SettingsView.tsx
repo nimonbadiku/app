@@ -2,16 +2,6 @@
 
 import React, { useState } from "react";
 import { UserSettingsConfig, SessionRecord } from "@/types";
-import {
-  Save,
-  Download,
-  Trash2,
-  RefreshCw,
-  Smartphone,
-  Check,
-  AlertCircle,
-  Wifi,
-} from "lucide-react";
 
 interface SettingsViewProps {
   settings: UserSettingsConfig;
@@ -126,82 +116,68 @@ export function SettingsView({
   };
 
   return (
-    <div className="max-w-md mx-auto px-5 pt-4 pb-28 space-y-6">
-      <div>
-        <h2 className="text-xl font-black uppercase tracking-tight text-neutral-950">
-          Settings
-        </h2>
-        <p className="text-xs text-neutral-500 font-medium">
-          Customize commission, units & exports
-        </p>
-      </div>
+    <div className="max-w-md mx-auto px-5 pt-3 pb-28">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-400">
+        Settings
+      </p>
 
-      {/* EARNINGS CONFIGURATION FORM */}
-      <form
-        onSubmit={handleSave}
-        className="bg-white rounded-2xl border border-neutral-200/90 p-5 shadow-2xs space-y-4"
-      >
-        <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 block mb-1">
-          Earnings & Commission
-        </span>
-
-        <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1">
-            My Earnings Per Item
+      <form onSubmit={handleSave} className="mt-3 bg-white rounded-2xl border border-neutral-200/80 p-4 space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <label htmlFor="earnings-input" className="text-[13px] text-neutral-500">
+            Earnings per item
           </label>
-          <div className="relative">
+          <div className="relative w-32">
             <input
+              id="earnings-input"
               type="number"
+              inputMode="decimal"
               step="any"
               min="0"
               value={earningsPerItem}
               onChange={(e) => setEarningsPerItem(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm font-bold focus:outline-none focus:border-black pr-14"
+              className="w-full px-3 py-2 pr-10 rounded-xl bg-neutral-50 text-[15px] font-semibold text-right tabular-nums focus:outline-none focus:ring-1 focus:ring-neutral-300"
               required
             />
-            <span className="absolute right-3.5 top-2.5 text-xs font-bold text-neutral-500">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
               {currency}
             </span>
           </div>
-          <p className="text-[11px] text-neutral-400 mt-1">
-            Your personal commission credited per sold item.
-          </p>
         </div>
 
-        <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1">
-            Retail Price Per Item
+        <div className="flex items-center justify-between gap-3">
+          <label htmlFor="price-input" className="text-[13px] text-neutral-500">
+            Retail price per item
           </label>
-          <div className="relative">
+          <div className="relative w-32">
             <input
+              id="price-input"
               type="number"
+              inputMode="decimal"
               step="any"
               min="0"
               value={pricePerItem}
               onChange={(e) => setPricePerItem(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm font-bold focus:outline-none focus:border-black pr-14"
+              className="w-full px-3 py-2 pr-10 rounded-xl bg-neutral-50 text-[15px] font-semibold text-right tabular-nums focus:outline-none focus:ring-1 focus:ring-neutral-300"
               required
             />
-            <span className="absolute right-3.5 top-2.5 text-xs font-bold text-neutral-500">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
               {currency}
             </span>
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1">
-            Currency Label
-          </label>
-          <div className="flex gap-2">
+          <p className="text-[13px] text-neutral-500 mb-2">Currency</p>
+          <div className="flex gap-1.5">
             {["kr", "DKK", "$", "€", "£"].map((c) => (
               <button
                 key={c}
                 type="button"
                 onClick={() => setCurrency(c)}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                className={`flex-1 h-9 text-[13px] font-semibold rounded-xl transition-colors cursor-pointer ${
                   currency === c
-                    ? "bg-black text-white border-black"
-                    : "bg-neutral-50 text-neutral-700 border-neutral-200 hover:border-neutral-400"
+                    ? "bg-black text-white"
+                    : "bg-neutral-100 text-neutral-500"
                 }`}
               >
                 {c}
@@ -213,116 +189,87 @@ export function SettingsView({
         <button
           type="submit"
           disabled={isSaving}
-          className="w-full h-12 bg-black text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-neutral-900 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+          className="w-full h-12 bg-black text-white rounded-2xl font-bold text-[15px] active:scale-[0.98] transition-transform cursor-pointer"
         >
-          {saveSuccess ? (
-            <>
-              <Check className="w-4 h-4 stroke-[3]" />
-              <span>SAVED</span>
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4" />
-              <span>{isSaving ? "SAVING..." : "SAVE SETTINGS"}</span>
-            </>
-          )}
+          {saveSuccess ? "Saved" : isSaving ? "Saving…" : "Save"}
         </button>
       </form>
 
-      {/* OFFLINE & SYNC STATUS */}
-      <div className="bg-white rounded-2xl border border-neutral-200/90 p-5 shadow-2xs space-y-3">
-        <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 block">
-          Offline & Sync Status
-        </span>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wifi className="w-4 h-4 text-neutral-800" />
-            <span className="text-xs font-bold text-neutral-900">
-              {offlinePendingCount > 0
-                ? `${offlinePendingCount} session(s) pending sync`
-                : "All sessions synchronized"}
-            </span>
-          </div>
-          {offlinePendingCount > 0 && (
-            <button
-              onClick={async () => {
-                setIsSyncing(true);
-                await onSyncOffline();
-                setIsSyncing(false);
-              }}
-              disabled={isSyncing}
-              className="text-xs px-3 py-1 bg-black text-white rounded-lg font-bold"
-            >
-              {isSyncing ? "Syncing..." : "Sync Now"}
-            </button>
-          )}
+      <div className="mt-3 bg-white rounded-2xl border border-neutral-200/80 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[13px] text-neutral-500">
+            {offlinePendingCount > 0
+              ? `${offlinePendingCount} pending sync`
+              : "All synced"}
+          </p>
+          <button
+            onClick={async () => {
+              setIsSyncing(true);
+              await onSyncOffline();
+              setIsSyncing(false);
+            }}
+            disabled={isSyncing || offlinePendingCount === 0}
+            className="text-[13px] font-semibold text-neutral-900 disabled:text-neutral-300 cursor-pointer"
+          >
+            {isSyncing ? "Syncing…" : "Sync now"}
+          </button>
         </div>
-        <p className="text-[11px] text-neutral-500">
-          DoorTrack is fully offline-resilient. Active routes are always preserved on your device even if cell reception drops between houses.
+        <p className="text-[11px] text-neutral-400 mt-1">
+          Sessions stay on your iPhone even without reception.
         </p>
       </div>
 
-      {/* EXPORT & DATA MANAGEMENT */}
-      <div className="bg-white rounded-2xl border border-neutral-200/90 p-5 shadow-2xs space-y-3">
-        <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 block">
-          Data Export
-        </span>
-
-        <div className="grid grid-cols-2 gap-2">
+      <div className="mt-3 bg-white rounded-2xl border border-neutral-200/80 p-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
+          Export
+        </p>
+        <div className="mt-2.5 flex gap-1.5">
           <button
             onClick={handleExportCSV}
             disabled={sessions.length === 0}
-            className="h-11 border border-neutral-300 hover:border-black rounded-xl text-xs font-bold uppercase tracking-wider text-neutral-800 flex items-center justify-center gap-2 disabled:opacity-40 cursor-pointer"
+            className="flex-1 h-10 rounded-xl bg-neutral-100 text-[13px] font-semibold text-neutral-700 disabled:text-neutral-300 cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+            CSV
           </button>
           <button
             onClick={handleExportJSON}
             disabled={sessions.length === 0}
-            className="h-11 border border-neutral-300 hover:border-black rounded-xl text-xs font-bold uppercase tracking-wider text-neutral-800 flex items-center justify-center gap-2 disabled:opacity-40 cursor-pointer"
+            className="flex-1 h-10 rounded-xl bg-neutral-100 text-[13px] font-semibold text-neutral-700 disabled:text-neutral-300 cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export JSON</span>
+            JSON
           </button>
         </div>
       </div>
 
-      {/* IPHONE HOME SCREEN INSTRUCTIONS */}
-      <div className="bg-white rounded-2xl border border-neutral-200/90 p-5 shadow-2xs space-y-2">
-        <span className="text-[10px] font-black uppercase tracking-widest text-neutral-900 flex items-center gap-1.5">
-          <Smartphone className="w-3.5 h-3.5" />
-          Add to iPhone Home Screen
-        </span>
-        <ol className="text-xs text-neutral-600 space-y-1 list-decimal list-inside leading-relaxed pt-1">
-          <li>Open this link in Safari on your iPhone</li>
-          <li>Tap the <strong>Share</strong> icon (square with arrow)</li>
-          <li>Scroll down and tap <strong>Add to Home Screen</strong></li>
-          <li>Launch DoorTrack directly with full-screen native feel</li>
+      <div className="mt-3 px-1">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
+          Install on iPhone
+        </p>
+        <ol className="mt-1.5 text-[13px] text-neutral-500 space-y-0.5 list-decimal list-inside">
+          <li>Open this page in Safari</li>
+          <li>Tap Share, then Add to Home Screen</li>
         </ol>
       </div>
 
-      {/* RESET DATA */}
-      <div className="pt-2">
+      <div className="mt-4">
         {confirmClear ? (
-          <div className="bg-neutral-100 rounded-2xl p-4 text-center space-y-2">
-            <span className="text-xs font-bold text-neutral-900 block">
+          <div className="bg-neutral-50 rounded-2xl p-4 text-center">
+            <p className="text-[13px] font-semibold text-neutral-900">
               Delete all {sessions.length} sessions?
-            </span>
-            <div className="flex gap-2">
+            </p>
+            <div className="flex gap-1.5 mt-3">
               <button
                 onClick={async () => {
                   await onClearData();
                   setConfirmClear(false);
                 }}
-                className="flex-1 py-2 bg-black text-white text-xs font-bold rounded-xl uppercase"
+                className="flex-1 h-10 bg-black text-white text-[13px] font-semibold rounded-xl cursor-pointer"
               >
-                Yes, Delete All
+                Delete
               </button>
               <button
                 onClick={() => setConfirmClear(false)}
-                className="flex-1 py-2 bg-white text-neutral-700 text-xs font-bold rounded-xl border border-neutral-300"
+                className="flex-1 h-10 text-neutral-500 text-[13px] font-medium cursor-pointer"
               >
                 Cancel
               </button>
@@ -331,10 +278,9 @@ export function SettingsView({
         ) : (
           <button
             onClick={() => setConfirmClear(true)}
-            className="w-full py-2.5 text-xs font-bold text-neutral-400 hover:text-red-600 transition-colors uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
+            className="w-full text-[13px] font-medium text-neutral-300 py-2 cursor-pointer"
           >
-            <Trash2 className="w-3.5 h-3.5" />
-            <span>Reset / Clear All Sessions</span>
+            Clear all sessions
           </button>
         )}
       </div>

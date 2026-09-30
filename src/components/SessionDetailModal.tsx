@@ -9,17 +9,7 @@ import {
   formatHourlyRate,
   calculateHourlyRateNumber,
 } from "@/lib/formatters";
-import {
-  ChevronLeft,
-  Trash2,
-  Sparkles,
-  CheckCircle2,
-  XCircle,
-  Home,
-  Package,
-  DoorClosed,
-  TrendingUp,
-} from "lucide-react";
+import { ChevronLeft, Trash2 } from "lucide-react";
 
 interface SessionDetailModalProps {
   session: SessionRecord;
@@ -95,208 +85,129 @@ export function SessionDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150">
-      <div className="w-full max-w-md max-h-[92vh] overflow-y-auto bg-white rounded-t-[32px] sm:rounded-[32px] p-6 pb-safe border border-neutral-200 shadow-2xl animate-in slide-in-from-bottom-6 duration-200">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center animate-in fade-in duration-150">
+      <div className="w-full max-w-md max-h-[92vh] overflow-y-auto bg-white rounded-t-[24px] p-5 pb-safe">
         {/* Top bar */}
-        <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
+        <div className="flex items-center justify-between">
           <button
             onClick={onClose}
-            className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-neutral-600 hover:text-black py-1 -ml-1 cursor-pointer"
+            className="text-neutral-400 p-2 -ml-2 cursor-pointer"
+            aria-label="Close"
           >
-            <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
-            <span>Back</span>
+            <ChevronLeft className="w-5 h-5 stroke-[2.2]" />
           </button>
 
-          <span className="text-xs font-black uppercase tracking-widest text-neutral-900">
-            {formatDateCaps(session.startedAt)}
+          <span className="text-[11px] font-medium text-neutral-400 tabular-nums">
+            {formatDateCaps(session.startedAt)} · {formatTimeShort(session.startedAt)}–{formatTimeShort(session.endedAt)}
           </span>
 
           <button
             onClick={() => setConfirmDelete(true)}
-            className="text-neutral-400 hover:text-red-600 p-1 transition-colors cursor-pointer"
+            className="text-neutral-300 p-2 -mr-2 cursor-pointer"
             aria-label="Delete session"
           >
             <Trash2 className="w-4 h-4 stroke-[1.8]" />
           </button>
         </div>
 
-        {/* Hero numbers */}
-        <div className="text-center py-6 border-b border-neutral-100">
-          <h2 className="text-5xl font-black text-neutral-950 font-sans tracking-tight">
-            {session.earnings}{" "}
-            <span className="text-3xl font-extrabold text-neutral-800">
-              {session.currency}
-            </span>
-          </h2>
-          <p className="mt-2 text-sm font-semibold text-neutral-600 tracking-wide">
-            {formatDurationHuman(session.durationSeconds)} •{" "}
-            {formatHourlyRate(
-              session.earnings,
-              session.durationSeconds,
-              session.currency
-            )}
+        {/* Hero */}
+        <div className="text-center pt-2 pb-4">
+          <p className="text-[36px] leading-none font-bold tabular-nums tracking-tight text-neutral-950">
+            {session.earnings} <span className="text-xl font-semibold text-neutral-400">{session.currency}</span>
           </p>
-          <p className="text-xs text-neutral-400 mt-1">
-            {formatTimeShort(session.startedAt)} – {formatTimeShort(session.endedAt)}
+          <p className="mt-1.5 text-[13px] font-medium text-neutral-400 tabular-nums">
+            {formatDurationHuman(session.durationSeconds)} ·{" "}
+            {formatHourlyRate(session.earnings, session.durationSeconds, session.currency)}
           </p>
         </div>
 
-        {/* Live Doors breakdown */}
-        <div className="grid grid-cols-4 gap-2 py-5 text-center border-b border-neutral-100">
-          <div className="flex flex-col items-center">
-            <DoorClosed className="w-4 h-4 text-neutral-600 mb-1" />
-            <span className="text-lg font-black text-neutral-900">{session.doors}</span>
-            <span className="text-[10px] font-bold text-neutral-400 uppercase">Doors</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <CheckCircle2 className="w-4 h-4 text-neutral-600 mb-1" />
-            <span className="text-lg font-black text-neutral-900">{session.yesCount}</span>
-            <span className="text-[10px] font-bold text-neutral-400 uppercase">Yes</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <XCircle className="w-4 h-4 text-neutral-600 mb-1" />
-            <span className="text-lg font-black text-neutral-900">{session.noCount}</span>
-            <span className="text-[10px] font-bold text-neutral-400 uppercase">No</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <Home className="w-4 h-4 text-neutral-600 mb-1" />
-            <span className="text-lg font-black text-neutral-900">{session.notHomeCount}</span>
-            <span className="text-[10px] font-bold text-neutral-400 uppercase">Not Home</span>
-          </div>
+        {/* Doors breakdown */}
+        <div className="flex items-center justify-center divide-x divide-neutral-200/80 py-3">
+          {[
+            { v: session.doors, l: "Doors" },
+            { v: session.yesCount, l: "Yes" },
+            { v: session.noCount, l: "No" },
+            { v: session.notHomeCount, l: "No ans." },
+          ].map((s) => (
+            <div key={s.l} className="px-4 text-center">
+              <p className="text-[19px] font-bold tabular-nums text-neutral-900 leading-none">{s.v}</p>
+              <p className="text-[10px] font-medium text-neutral-400 mt-1">{s.l}</p>
+            </div>
+          ))}
         </div>
 
-        {/* Conversion Metrics */}
-        <div className="py-4 border-b border-neutral-100">
-          <span className="text-[11px] font-black uppercase tracking-wider text-neutral-900 block mb-2.5">
-            Conversion Rates
-          </span>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="p-2.5 bg-neutral-50 rounded-xl">
-              <span className="text-neutral-500 block text-[10px] font-bold uppercase">
-                Yes Rate (Doors)
-              </span>
-              <span className="text-base font-black text-neutral-950 mt-0.5 block">
-                {yesRate}%
-              </span>
+        {/* Conversion metrics — plain rows */}
+        <div className="mt-4 bg-neutral-50 rounded-2xl p-4 space-y-2">
+          {[
+            { l: "Yes rate", v: `${yesRate}%` },
+            { l: "Contact rate", v: `${contactRate}%` },
+            { l: "Close rate", v: `${closeRate}%` },
+            { l: "Doors / hour", v: `${doorsPerHour}` },
+            { l: "Items per yes", v: `${itemsPerYes}` },
+          ].map((row) => (
+            <div key={row.l} className="flex justify-between text-[13px]">
+              <span className="text-neutral-400">{row.l}</span>
+              <span className="font-semibold text-neutral-900 tabular-nums">{row.v}</span>
             </div>
-            <div className="p-2.5 bg-neutral-50 rounded-xl">
-              <span className="text-neutral-500 block text-[10px] font-bold uppercase">
-                Contact Rate
-              </span>
-              <span className="text-base font-black text-neutral-950 mt-0.5 block">
-                {contactRate}%
-              </span>
-            </div>
-            <div className="p-2.5 bg-neutral-50 rounded-xl">
-              <span className="text-neutral-500 block text-[10px] font-bold uppercase">
-                Close Rate (Contacts)
-              </span>
-              <span className="text-base font-black text-neutral-950 mt-0.5 block">
-                {closeRate}%
-              </span>
-            </div>
-            <div className="p-2.5 bg-neutral-50 rounded-xl">
-              <span className="text-neutral-500 block text-[10px] font-bold uppercase">
-                Doors / Hour
-              </span>
-              <span className="text-base font-black text-neutral-950 mt-0.5 block">
-                {doorsPerHour}
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Compared with your average (Requirement #13) */}
+        {/* Compared with average */}
         {otherSessions.length > 0 && (
-          <div className="py-4 border-b border-neutral-100">
-            <span className="text-[11px] font-black uppercase tracking-wider text-neutral-900 flex items-center gap-1.5 mb-2.5">
-              <TrendingUp className="w-3.5 h-3.5" />
-              Compared with your average
-            </span>
-            <div className="bg-neutral-50/70 border border-neutral-200/80 rounded-xl p-3 space-y-2 text-xs font-semibold">
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-600">{session.currency} / hour</span>
-                <span
-                  className={
-                    avgRateDiff !== null && avgRateDiff >= 0
-                      ? "text-black font-black"
-                      : "text-neutral-500 font-bold"
-                  }
-                >
-                  {formatDiff(avgRateDiff, "%")}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-600">Doors / hour</span>
-                <span
-                  className={
-                    avgDoorsPerHourDiff !== null && avgDoorsPerHourDiff >= 0
-                      ? "text-black font-black"
-                      : "text-neutral-500 font-bold"
-                  }
-                >
-                  {formatDiff(avgDoorsPerHourDiff, "%")}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-600">Yes rate</span>
-                <span
-                  className={
-                    avgYesRateDiff !== null && avgYesRateDiff >= 0
-                      ? "text-black font-black"
-                      : "text-neutral-500 font-bold"
-                  }
-                >
-                  {formatDiff(avgYesRateDiff, "%")}
-                </span>
-              </div>
+          <div className="mt-3 bg-neutral-50 rounded-2xl p-4 space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
+              vs your average
+            </p>
+            <div className="flex justify-between text-[13px]">
+              <span className="text-neutral-400">{session.currency} / hour</span>
+              <span className="font-semibold text-neutral-900 tabular-nums">
+                {formatDiff(avgRateDiff, "%")}
+              </span>
+            </div>
+            <div className="flex justify-between text-[13px]">
+              <span className="text-neutral-400">Doors / hour</span>
+              <span className="font-semibold text-neutral-900 tabular-nums">
+                {formatDiff(avgDoorsPerHourDiff, "%")}
+              </span>
+            </div>
+            <div className="flex justify-between text-[13px]">
+              <span className="text-neutral-400">Yes rate</span>
+              <span className="font-semibold text-neutral-900 tabular-nums">
+                {formatDiff(avgYesRateDiff, "%")}
+              </span>
             </div>
           </div>
         )}
 
-        {/* Session Note & Experiment (with personal handwritten accent) */}
+        {/* Note / experiment */}
         {(session.note || session.experiment) && (
-          <div className="py-4 border-b border-neutral-100">
+          <div className="mt-3 px-1 space-y-1">
             {session.experiment && (
-              <div className="mb-2">
-                <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 block mb-1">
-                  Tested Experiment
-                </span>
-                <p className="text-sm font-handwriting text-neutral-800 bg-neutral-50 px-3 py-1.5 rounded-lg inline-block">
-                  &ldquo;{session.experiment}&rdquo;
-                </p>
-              </div>
+              <p className="text-[13px] text-neutral-500">
+                Focus: <span className="text-neutral-900 font-medium">{session.experiment}</span>
+              </p>
             )}
             {session.note && (
-              <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 block mb-1">
-                  Personal Note
-                </span>
-                <p className="text-base font-handwriting text-neutral-900 bg-neutral-50/80 p-3 rounded-xl border border-neutral-200/60 leading-relaxed">
-                  &ldquo;{session.note}&rdquo;
-                </p>
-              </div>
+              <p className="text-[13px] text-neutral-500">{session.note}</p>
             )}
           </div>
         )}
 
-        {/* Close Button */}
-        <div className="pt-5">
-          <button
-            onClick={onClose}
-            className="w-full h-14 bg-black text-white rounded-2xl font-black text-sm uppercase tracking-wider hover:bg-neutral-900 active:scale-[0.98] transition-all cursor-pointer"
-          >
-            DONE
-          </button>
-        </div>
+        {/* Close */}
+        <button
+          onClick={onClose}
+          className="mt-4 w-full h-[54px] bg-black text-white rounded-2xl font-bold text-[16px] active:scale-[0.98] transition-transform cursor-pointer"
+        >
+          Done
+        </button>
 
-        {/* Delete Confirmation Overlay */}
+        {/* Delete confirmation */}
         {confirmDelete && (
-          <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl p-5 max-w-xs w-full shadow-2xl text-center">
-              <h4 className="text-base font-black text-neutral-900">Delete this session?</h4>
-              <p className="text-xs text-neutral-500 mt-1 mb-4">
-                This action cannot be undone. Historical stats will update.
+          <div className="fixed inset-0 z-60 bg-black/60 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl p-5 max-w-xs w-full text-center">
+              <p className="text-[15px] font-bold text-neutral-900">Delete this session?</p>
+              <p className="text-[13px] text-neutral-400 mt-1 mb-4">
+                This can&apos;t be undone.
               </p>
               <div className="space-y-2">
                 <button
@@ -304,13 +215,13 @@ export function SessionDetailModal({
                     onDelete(session.id);
                     onClose();
                   }}
-                  className="w-full py-2.5 bg-black text-white text-xs font-bold rounded-xl uppercase tracking-wider hover:bg-neutral-900"
+                  className="w-full h-11 bg-black text-white text-[15px] font-semibold rounded-xl active:scale-[0.98] transition-transform cursor-pointer"
                 >
-                  Confirm Delete
+                  Delete
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="w-full py-2.5 bg-neutral-100 text-neutral-800 text-xs font-bold rounded-xl uppercase tracking-wider hover:bg-neutral-200"
+                  className="w-full h-11 text-neutral-500 text-[15px] font-medium cursor-pointer"
                 >
                   Cancel
                 </button>

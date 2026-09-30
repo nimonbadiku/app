@@ -26,54 +26,47 @@ export function Header({
     }
   };
 
+  const showBack = activeTab !== "SELL" || isSelling;
+
   return (
-    <header className="sticky top-0 z-30 bg-[#FAFAFA] border-b border-transparent px-6 pt-safe pb-2">
-      <div className="flex items-center justify-between h-12 max-w-md mx-auto">
-        {/* Left Back Arrow - matching reference image */}
-        <div className="w-10 flex items-center">
-          {activeTab !== "SELL" ? (
+    <header className="sticky top-0 z-30 bg-[#FAFAFA]/95 backdrop-blur-md px-5 pt-safe pb-1.5">
+      <div className="flex items-center h-11 max-w-md mx-auto">
+        {/* Left: back only when it does something */}
+        <div className="w-9 flex items-center">
+          {showBack && (
             <button
               onClick={handleBack}
-              aria-label="Back to sell"
-              className="p-1 -ml-2 rounded-full hover:bg-neutral-100 active:scale-90 transition-all text-neutral-900 cursor-pointer"
+              aria-label="Back"
+              className="p-1.5 -ml-1.5 rounded-full hover:bg-neutral-100 active:scale-90 transition-all text-neutral-900 cursor-pointer"
             >
-              <ArrowLeft className="w-6 h-6 stroke-[2.4]" />
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
             </button>
-          ) : isSelling ? (
-            <button
-              onClick={() => onTabChange("HISTORY")}
-              aria-label="View history"
-              className="p-1 -ml-2 rounded-full hover:bg-neutral-100 active:scale-90 transition-all text-neutral-900 cursor-pointer"
-              title="View History while session continues"
-            >
-              <ArrowLeft className="w-6 h-6 stroke-[2.4]" />
-            </button>
-          ) : (
-            <div className="w-6" />
           )}
         </div>
 
-        {/* Center Title - Bold uppercase DoorTrack */}
-        <div className="text-center flex-1 px-2">
-          <h1 className="text-base font-black tracking-wider uppercase text-neutral-950 font-sans">
-            DOORTRACK
+        {/* Center: single brand line. No duplicate hero below. */}
+        <div className="text-center flex-1 px-2 min-w-0">
+          <h1 className="text-[13px] font-bold tracking-[0.18em] uppercase text-neutral-900 font-sans leading-none">
+            Doortrack
           </h1>
           {isSelling && experiment && (
-            <p className="text-[13px] text-neutral-500 font-handwriting truncate max-w-[190px] mx-auto leading-none">
-              &ldquo;{experiment}&rdquo;
+            <p className="text-xs text-neutral-500 truncate max-w-[200px] mx-auto leading-tight mt-0.5">
+              {experiment}
             </p>
           )}
         </div>
 
-        {/* Right Settings Gear - matching reference image */}
-        <div className="w-10 flex justify-end">
-          <button
-            onClick={onOpenSettings}
-            aria-label="Settings"
-            className="p-1 -mr-2 rounded-full hover:bg-neutral-100 active:scale-90 transition-all text-neutral-900 cursor-pointer"
-          >
-            <Settings className="w-6 h-6 stroke-[1.8]" />
-          </button>
+        {/* Right: settings only when idle — bottom tab covers it otherwise */}
+        <div className="w-9 flex justify-end">
+          {!isSelling && activeTab === "SELL" && (
+            <button
+              onClick={onOpenSettings}
+              aria-label="Settings"
+              className="p-1.5 -mr-1.5 rounded-full hover:bg-neutral-100 active:scale-90 transition-all text-neutral-500 cursor-pointer"
+            >
+              <Settings className="w-5 h-5 stroke-[1.8]" />
+            </button>
+          )}
         </div>
       </div>
     </header>

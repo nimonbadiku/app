@@ -300,11 +300,9 @@ export default function HomePage() {
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
-        <div className="text-center">
-          <span className="text-sm font-black tracking-widest uppercase">
-            DOORTRACK
-          </span>
-        </div>
+        <span className="text-[13px] font-semibold tracking-[0.18em] uppercase text-neutral-300">
+          Doortrack
+        </span>
       </div>
     );
   }

@@ -11,12 +11,8 @@ import {
   formatHourlyRate,
 } from "@/lib/formatters";
 import {
-  Package,
-  Ban,
   Plus,
   Minus,
-  Sparkles,
-  Undo2,
 } from "lucide-react";
 
 interface ActiveSessionViewProps {
@@ -194,7 +190,7 @@ export function ActiveSessionView({
   const canUndo = session.actionHistory.length > 0;
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-130px)] max-w-md mx-auto px-6 pt-3 pb-8 justify-between select-none">
+    <div className="flex flex-col max-w-md mx-auto px-5 pt-2 pb-28 select-none min-h-[calc(100dvh-120px)]">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-4 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-in fade-in slide-in-from-top-2 duration-150">
@@ -202,261 +198,131 @@ export function ActiveSessionView({
         </div>
       )}
 
-      {/* TOP SECTION: EARNINGS & TIME */}
-      <div className="text-center pt-3 pb-4">
-        {/* Large bold earnings - reference image style: e.g. "340 kr" */}
-        <h2 className="text-[64px] leading-tight font-black tracking-tight text-black font-sans">
-          {totalEarnings}{" "}
-          <span className="text-[52px] font-black text-black">
-            {settings.currency}
-          </span>
-        </h2>
-
-        {/* Subtitle: 01:14:32 · 291 kr / hour */}
-        <p className="mt-1 text-sm font-semibold text-neutral-600 tracking-wide flex items-center justify-center gap-2">
-          <span className="font-mono text-[15px] font-bold text-neutral-900">
-            {formatTimer(elapsedSeconds)}
-          </span>
-          <span className="text-neutral-400 font-bold">•</span>
-          <span className="font-semibold text-neutral-800">
-            {formatHourlyRate(totalEarnings, elapsedSeconds, settings.currency)}
-          </span>
+      {/* Earnings + time — one quiet block */}
+      <div className="text-center pt-2">
+        <p className="text-[40px] leading-none font-bold tabular-nums tracking-tight text-neutral-950">
+          {totalEarnings} <span className="text-[22px] font-semibold text-neutral-400">{settings.currency}</span>
         </p>
-
-        {/* Subtle experiment / human note tag if active */}
-        {session.experiment && (
-          <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 text-xs">
-            <Sparkles className="w-3.5 h-3.5 text-neutral-600" />
-            <span className="font-handwriting text-sm text-neutral-900 font-semibold">
-              &ldquo;{session.experiment}&rdquo;
-            </span>
-          </div>
-        )}
+        <p className="mt-1.5 text-[13px] font-medium text-neutral-400 tabular-nums">
+          {formatTimer(elapsedSeconds)} · {formatHourlyRate(totalEarnings, elapsedSeconds, settings.currency)}
+        </p>
       </div>
 
-      {/* LIVE STATISTICS: 4 COLUMNS (Matching screenshot icons & spacing) */}
-      <div className="py-2 px-1">
-        <div className="grid grid-cols-4 gap-2 text-center">
-          {/* 1. DOORS - Slim door rectangle with knob */}
-          <div className="flex flex-col items-center">
-            <svg
-              className="w-5 h-5 text-neutral-700 stroke-[1.8] mb-1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <rect x="5.5" y="3" width="13" height="18" rx="1.5" strokeWidth="1.8" />
-              <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" />
-            </svg>
-            <span className="text-xl font-black text-neutral-950 leading-none">
-              {session.doors}
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mt-1">
-              DOORS
-            </span>
+      {/* Live counts — text only, dividers, no icon soup */}
+      <div className="mt-4 flex items-center justify-center divide-x divide-neutral-200/80">
+        {[
+          { v: session.doors, l: "Doors" },
+          { v: session.yesCount, l: "Yes" },
+          { v: session.itemsSold, l: "Items" },
+          { v: session.notHomeCount, l: "No ans." },
+        ].map((s) => (
+          <div key={s.l} className="px-4 text-center">
+            <p className="text-[19px] font-bold tabular-nums text-neutral-900 leading-none">{s.v}</p>
+            <p className="text-[10px] font-medium text-neutral-400 mt-1">{s.l}</p>
           </div>
+        ))}
+      </div>
 
-          {/* 2. YES - Checkmark inside circle */}
-          <div className="flex flex-col items-center">
-            <svg
-              className="w-5 h-5 text-neutral-700 stroke-[1.8] mb-1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <circle cx="12" cy="12" r="9" strokeWidth="1.8" />
-              <path
-                d="M8.5 12.5L11 15L16 9"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className="text-xl font-black text-neutral-950 leading-none">
-              {session.yesCount}
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mt-1">
-              YES
-            </span>
-          </div>
+      {/* Spacer pushes the action buttons into thumb reach */}
+      <div className="flex-1 min-h-4" />
 
-          {/* 3. ITEMS - Isometric parcel box */}
-          <div className="flex flex-col items-center">
-            <Package className="w-5 h-5 text-neutral-700 stroke-[1.8] mb-1.5" />
-            <span className="text-xl font-black text-neutral-950 leading-none">
-              {session.itemsSold}
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mt-1">
-              ITEMS
-            </span>
-          </div>
+      <div className="space-y-2.5">
+        <button
+          onClick={handleOpenYesModal}
+          className="w-full h-[68px] bg-black text-white rounded-2xl text-[19px] font-bold active:scale-[0.98] transition-transform cursor-pointer"
+          aria-label="Door result: Yes sale"
+        >
+          Yes
+        </button>
 
-          {/* 4. NO ANSWER - Circle with slash */}
-          <div className="flex flex-col items-center">
-            <Ban className="w-5 h-5 text-neutral-700 stroke-[1.8] mb-1.5" />
-            <span className="text-xl font-black text-neutral-950 leading-none">
-              {session.notHomeCount}
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mt-1">
-              NO ANSWER
-            </span>
-          </div>
+        <div className="grid grid-cols-2 gap-2.5">
+          <button
+            onClick={handleNo}
+            className="h-[68px] bg-white text-neutral-900 rounded-2xl text-[17px] font-bold border border-neutral-300 active:scale-[0.98] transition-transform cursor-pointer"
+            aria-label="Door result: No"
+          >
+            No
+          </button>
+          <button
+            onClick={handleNotHome}
+            className="h-[68px] bg-white text-neutral-500 rounded-2xl text-[15px] font-semibold border border-neutral-200 active:scale-[0.98] transition-transform cursor-pointer"
+            aria-label="Door result: Not home"
+          >
+            Not home
+          </button>
         </div>
       </div>
 
-      {/* MAIN ACTION BUTTONS: 3 HUGE THUMB BUTTONS (Reference image layout) */}
-      <div className="space-y-3.5 my-3">
-        {/* 1. YES: Solid black button */}
-        <button
-          onClick={handleOpenYesModal}
-          className="w-full h-17 bg-black text-white rounded-[22px] flex items-center justify-center gap-3.5 text-xl font-black tracking-wide hover:bg-neutral-900 active:scale-[0.98] transition-all cursor-pointer shadow-sm tap-active"
-          aria-label="Door result: Yes sale"
-        >
-          <div className="w-8 h-8 rounded-full border-[2.2px] border-white flex items-center justify-center">
-            <svg
-              className="w-4 h-4 text-white stroke-[3.5]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <span>YES</span>
-        </button>
-
-        {/* 2. NO: White button with black border and circular X */}
-        <button
-          onClick={handleNo}
-          className="w-full h-17 bg-white text-black rounded-[22px] flex items-center justify-center gap-3.5 text-xl font-black tracking-wide border-2 border-black hover:bg-neutral-50 active:scale-[0.98] transition-all cursor-pointer tap-active"
-          aria-label="Door result: No"
-        >
-          <div className="w-8 h-8 rounded-full border-[2.2px] border-black flex items-center justify-center">
-            <svg
-              className="w-4 h-4 text-black stroke-[3.2]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" strokeLinecap="round" strokeLinejoin="round" />
-              <line x1="6" y1="6" x2="18" y2="18" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <span>NO</span>
-        </button>
-
-        {/* 3. NOT HOME: White button with black border and house icon */}
-        <button
-          onClick={handleNotHome}
-          className="w-full h-17 bg-white text-black rounded-[22px] flex items-center justify-center gap-3.5 text-xl font-black tracking-wide border-2 border-black hover:bg-neutral-50 active:scale-[0.98] transition-all cursor-pointer tap-active"
-          aria-label="Door result: Not home"
-        >
-          <svg
-            className="w-7 h-7 text-black stroke-[2.2]"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-          >
-            <path
-              d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M9 21V12H15V21"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span>NOT HOME</span>
-        </button>
-      </div>
-
-      {/* BOTTOM ACTIONS: UNDO & END SESSION */}
-      <div className="flex flex-col items-center gap-2 pt-1 pb-1">
-        {/* UNDO BUTTON matching reference */}
+      <div className="mt-3 flex items-center justify-center">
         <button
           onClick={handleUndo}
           disabled={!canUndo}
-          className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full transition-all cursor-pointer ${
-            canUndo
-              ? "text-neutral-900 hover:bg-neutral-100 active:scale-95"
-              : "text-neutral-300 cursor-not-allowed"
+          className={`text-xs font-medium px-4 py-2 cursor-pointer ${
+            canUndo ? "text-neutral-400" : "text-neutral-200"
           }`}
           aria-label="Undo last door action"
         >
-          <Undo2 className="w-4 h-4 stroke-[2.4]" />
-          <span>UNDO</span>
-          {canUndo && (
-            <span className="text-[10px] text-neutral-400 font-normal lowercase">
-              ({session.actionHistory[0]?.type.toLowerCase()})
-            </span>
-          )}
+          Undo
         </button>
 
-        {/* End Session trigger */}
+        <span className="w-px h-3.5 bg-neutral-200" />
+
         <button
           onClick={() => setEndModalOpen(true)}
-          className="text-[11px] font-bold text-neutral-400 hover:text-black uppercase tracking-wider py-1 cursor-pointer transition-colors"
+          className="text-xs font-medium text-neutral-400 px-4 py-2 cursor-pointer"
         >
-          End Session
+          End session
         </button>
       </div>
 
-      {/* QUANTITY PICKER (Opens instantly on YES) */}
       {quantityModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm bg-white rounded-t-[28px] sm:rounded-[28px] p-6 pb-safe border border-neutral-200 shadow-2xl animate-in slide-in-from-bottom-6 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
-              <h3 className="text-lg font-black text-neutral-950 uppercase tracking-tight">
-                How many items?
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center animate-in fade-in duration-150">
+          <div className="w-full max-w-sm bg-white rounded-t-[24px] p-5 pb-safe">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[17px] font-bold text-neutral-950">
+                How many?
               </h3>
               <button
                 onClick={() => setQuantityModalOpen(false)}
-                className="text-neutral-400 hover:text-black p-1 text-base font-bold cursor-pointer"
+                className="text-neutral-400 p-2 -mr-2 text-base cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
-            {/* Stepper: -  1  + */}
-            <div className="flex items-center justify-center gap-6 py-7">
+            <div className="flex items-center justify-center gap-6 py-6">
               <button
                 onClick={() => setSelectedQuantity((q) => Math.max(1, q - 1))}
-                className="w-14 h-14 rounded-full border-2 border-neutral-300 hover:border-black flex items-center justify-center text-xl font-bold active:scale-95 transition-all text-neutral-900 cursor-pointer"
+                className="w-[52px] h-[52px] rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 active:scale-95 transition-transform cursor-pointer"
                 aria-label="Decrease quantity"
               >
-                <Minus className="w-6 h-6 stroke-[2.5]" />
+                <Minus className="w-5 h-5 stroke-[2.2]" />
               </button>
 
-              <div className="text-center w-20">
-                <span className="text-5xl font-black text-black font-sans">
+              <div className="text-center w-16">
+                <span className="text-[44px] leading-none font-bold tabular-nums text-neutral-950">
                   {selectedQuantity}
-                </span>
-                <span className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mt-1">
-                  {selectedQuantity === 1 ? "Item" : "Items"}
                 </span>
               </div>
 
               <button
                 onClick={() => setSelectedQuantity((q) => q + 1)}
-                className="w-14 h-14 rounded-full border-2 border-neutral-300 hover:border-black flex items-center justify-center text-xl font-bold active:scale-95 transition-all text-neutral-900 cursor-pointer"
+                className="w-[52px] h-[52px] rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 active:scale-95 transition-transform cursor-pointer"
                 aria-label="Increase quantity"
               >
-                <Plus className="w-6 h-6 stroke-[2.5]" />
+                <Plus className="w-5 h-5 stroke-[2.2]" />
               </button>
             </div>
 
-            {/* Quick preset buttons */}
-            <div className="flex justify-center gap-2 pb-5">
+            <div className="flex justify-center gap-2 pb-4">
               {[1, 2, 3, 4, 5].map((num) => (
                 <button
                   key={num}
                   onClick={() => setSelectedQuantity(num)}
-                  className={`w-11 h-11 rounded-xl text-sm font-bold border transition-all cursor-pointer ${
+                  className={`w-10 h-10 rounded-full text-sm font-semibold transition-all cursor-pointer ${
                     selectedQuantity === num
-                      ? "bg-black text-white border-black"
-                      : "bg-neutral-50 text-neutral-800 border-neutral-200 hover:border-neutral-400"
+                      ? "bg-black text-white"
+                      : "bg-neutral-100 text-neutral-500"
                   }`}
                 >
                   {num}
@@ -464,76 +330,63 @@ export function ActiveSessionView({
               ))}
             </div>
 
-            <div className="text-center text-xs font-semibold text-neutral-500 mb-5">
-              +{selectedQuantity * settings.earningsPerItem} {settings.currency} earnings
+            <div className="text-center text-[13px] text-neutral-400 mb-4 tabular-nums">
+              +{selectedQuantity * settings.earningsPerItem} {settings.currency}
             </div>
 
-            {/* Large SAVE button */}
             <button
               onClick={() => handleSaveYes(selectedQuantity)}
-              className="w-full h-15 bg-black text-white rounded-2xl font-black text-lg uppercase tracking-wider hover:bg-neutral-900 active:scale-[0.98] transition-all cursor-pointer shadow-sm"
+              className="w-full h-[56px] bg-black text-white rounded-2xl font-bold text-[16px] active:scale-[0.98] transition-transform cursor-pointer"
             >
-              SAVE
+              Save
             </button>
           </div>
         </div>
       )}
 
-      {/* END SESSION CONFIRMATION MODAL */}
       {endModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm bg-white rounded-t-[28px] sm:rounded-[28px] p-6 pb-safe border border-neutral-200 shadow-2xl animate-in slide-in-from-bottom-6 duration-200">
-            <h3 className="text-xl font-black text-neutral-950 uppercase tracking-tight">
-              End this session?
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center animate-in fade-in duration-150">
+          <div className="w-full max-w-sm bg-white rounded-t-[24px] p-5 pb-safe">
+            <h3 className="text-[17px] font-bold text-neutral-950">
+              End session?
             </h3>
-            <p className="text-xs text-neutral-500 mt-1">
-              You logged {session.doors} doors and sold {session.itemsSold} items in{" "}
-              {formatTimer(elapsedSeconds)}.
+            <p className="text-[13px] text-neutral-500 mt-1 tabular-nums">
+              {session.doors} doors · {session.itemsSold} items ·{" "}
+              {formatTimer(elapsedSeconds)}
             </p>
 
-            {/* Optional experiment / focus field */}
-            <div className="mt-4">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-600 mb-1">
-                Experiment / Focus (optional)
-              </label>
+            <div className="mt-4 space-y-2.5">
               <input
                 type="text"
-                placeholder="e.g. New opener, Asked for 2 tickets"
+                placeholder="Focus (optional)"
                 value={sessionExperiment}
                 onChange={(e) => setSessionExperiment(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-black font-handwriting text-base"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-100 text-[15px] focus:outline-none placeholder:text-neutral-400"
               />
-            </div>
-
-            {/* Optional note field */}
-            <div className="mt-3">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-600 mb-1">
-                Session Note (optional)
-              </label>
               <textarea
-                placeholder="e.g. Tested shorter explanation, bad weather..."
+                placeholder="Note (optional)"
                 rows={2}
                 value={sessionNote}
                 onChange={(e) => setSessionNote(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-sm focus:outline-none focus:border-black resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-100 text-[15px] focus:outline-none resize-none placeholder:text-neutral-400"
               />
             </div>
 
-            <div className="space-y-2.5 mt-6">
+            <div className="mt-4 space-y-2">
               <button
                 onClick={() => {
                   setEndModalOpen(false);
                   onEndSession(sessionNote, sessionExperiment);
                 }}
-                className="w-full h-14 bg-black text-white rounded-xl font-black text-base uppercase tracking-wider hover:bg-neutral-900 active:scale-[0.98] transition-all cursor-pointer"
+                className="w-full h-[54px] bg-black text-white rounded-2xl font-bold text-[16px] active:scale-[0.98] transition-transform cursor-pointer"
               >
-                END SESSION
+                End session
               </button>
               <button
                 onClick={() => setEndModalOpen(false)}
-                className="w-full h-14 bg-white text-neutral-800 rounded-xl font-bold text-sm uppercase tracking-wider border border-neutral-300 hover:bg-neutral-50 active:scale-[0.98] transition-all cursor-pointer"
+                className="w-full h-[50px] text-neutral-500 font-semibold text-[15px] cursor-pointer"
               >
-                KEEP SELLING
+                Keep selling
               </button>
             </div>
           </div>

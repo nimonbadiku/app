@@ -38,8 +38,8 @@ export function BottomNav({ activeTab, onChangeTab, isSelling }: BottomNavProps)
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-[#FAFAFA]/95 backdrop-blur-md border-t border-neutral-200/80 pb-safe">
-      <div className="max-w-md mx-auto flex items-center justify-around h-14 px-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-[#FAFAFA]/95 backdrop-blur-md border-t border-neutral-200/70 pb-safe">
+      <div className="max-w-md mx-auto flex items-center h-[60px] px-6">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -47,26 +47,19 @@ export function BottomNav({ activeTab, onChangeTab, isSelling }: BottomNavProps)
             <button
               key={item.id}
               onClick={() => onChangeTab(item.id)}
-              className={`flex-1 flex flex-col items-center justify-center py-1 transition-colors relative ${
-                isActive ? "text-black" : "text-neutral-400 hover:text-neutral-600"
+              aria-label={item.label}
+              className={`flex-1 flex items-center justify-center py-2 transition-colors relative cursor-pointer ${
+                isActive ? "text-black" : "text-neutral-300"
               }`}
             >
               <div className="relative">
-                <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.8]"}`} />
+                <Icon className={`w-[22px] h-[22px] ${isActive ? "stroke-[2.2]" : "stroke-[1.7]"}`} />
                 {item.badge && (
-                  <span className="absolute -top-1 -right-1.5 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
+                  <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5">
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-black"></span>
                   </span>
                 )}
               </div>
-              <span
-                className={`text-[10px] tracking-wider uppercase mt-1 ${
-                  isActive ? "font-bold text-black" : "font-medium text-neutral-400"
-                }`}
-              >
-                {item.label}
-              </span>
             </button>
           );
         })}
